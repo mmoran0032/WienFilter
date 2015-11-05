@@ -3,13 +3,11 @@
 
 import curses
 import curses.panel
-from curses.textpad import Textbox
 import sys
 
 
 class WFdisplay(object):
   def __init__(self):
-    self.size = (80, 24)
     self.screen = curses.initscr()
     self.initializeCurses()
     self.colors = {
@@ -19,9 +17,9 @@ class WFdisplay(object):
       "default": curses.color_pair(3) | curses.A_BOLD,
       "critical": curses.color_pair(2) | curses.A_BOLD
     }
-    self.term_window = self.screen.subwin(0, 0)
-    self.term_window.keypad(1)
-    self.term_window.nodelay(1)
+    self.termWindow = self.screen.subwin(0, 0)
+    self.termWindow.keypad(1)
+    self.termWindow.nodelay(1)
     self.pressedkey = -1
 
   def initializeCurses(self):
@@ -37,17 +35,32 @@ class WFdisplay(object):
   def __str__(self):
     return "WF-Display: {}".format(self.data)
 
-  def display(self, data):
-    screenY, screenX = self.screen.getmaxyx()
+  def update(self, data):
+    self.flushDisplay(data)
+    exitKeyPressed = False
+    while not exitKeyPressed:
+      self.pressedkey = self.catchKey()
+      exitKeyPressed = self.isExitKey()
+      self.flushDisplay(data)
+      curses.napms(100)
 
-  def updateData(self, data):
-    self.data = data
+  def flushDisplay(self):
+    self.termWindow.erase()
+    self.display(data)
+
+  def display(self, data):
+    # THIS IS THE MAIN BRUNT OF THE DISPLAY, WITH BARS AND NUMBERS AND COLORS
+    # SO HEAVY ON THE CURSES STUFF...
+    pass
 
   def catchKey(self):
     self.pressedkey = self.term_window.getch()
-    if self.pressedkey in (ord("q"), ord("Q")):
+    if isExitKey():
       self.end()
       sys.exit(0)
+
+  def isExitKey(self):
+    return self.pressedkey in (ord("q"), ord("Q")
 
   def end(self):
     curses.echo()

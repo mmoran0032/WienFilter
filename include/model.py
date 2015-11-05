@@ -4,7 +4,6 @@
 import socket
 
 import share
-import share.commands as commands
 from share.config import negativeAddress, positiveAddress
 
 
