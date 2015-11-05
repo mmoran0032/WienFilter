@@ -3,11 +3,14 @@
 
 import curses
 import curses.panel
+from curses.textpad import Textbox
 import sys
 
 
 class WFdisplay(object):
   def __init__(self):
+    self.termX = 80
+    self.termY = 24
     self.screen = curses.initscr()
     self.initializeCurses()
     self.colors = {
@@ -35,24 +38,6 @@ class WFdisplay(object):
   def __str__(self):
     return "WF-Display: {}".format(self.data)
 
-  def update(self, data):
-    self.flushDisplay(data)
-    exitKeyPressed = False
-    while not exitKeyPressed:
-      self.pressedkey = self.catchKey()
-      exitKeyPressed = self.isExitKey()
-      self.flushDisplay(data)
-      curses.napms(100)
-
-  def flushDisplay(self):
-    self.termWindow.erase()
-    self.display(data)
-
-  def display(self, data):
-    # THIS IS THE MAIN BRUNT OF THE DISPLAY, WITH BARS AND NUMBERS AND COLORS
-    # SO HEAVY ON THE CURSES STUFF...
-    pass
-
   def catchKey(self):
     self.pressedkey = self.term_window.getch()
     if isExitKey():
@@ -60,10 +45,62 @@ class WFdisplay(object):
       sys.exit(0)
 
   def isExitKey(self):
-    return self.pressedkey in (ord("q"), ord("Q")
+    return self.pressedkey in (ord("q"), ord("Q"))
 
   def end(self):
     curses.echo()
     curses.nocbreak()
     curses.curs_set(1)
     curses.endwin()
+
+  def initializeLineColumn(self):
+    self.initializeLine()
+    self.initializeColumn()
+
+  def initializeLine(self):
+    self.line = 0
+    self.nextLine = 0
+
+  def initializeColumn(self):
+    self.cloumn = 0
+    self.nextColumn = 0
+
+  def newLine(self):
+    self.line = self.nextLine
+
+  def newColumn(self):
+    self.column = self.nextColumn
+
+  def display(self, data):
+    self.initializeLineColumn()
+    screenY, screenX = self.screen.getmaxyx()
+    pluginMaxWidth = None
+    # build individual stats views
+
+  def flush(self, data):
+    self.termWindow.erase()
+    self.display(data)
+
+  def update(self, data):
+    self.flush(data)
+    exitKeyPressed = False
+    while not exitKeyPressed:
+      pressedKey = self.catchKey()
+      exitKeyPressed = pressedKey in (ord("q"), ord("Q"))
+      if not exitKeyPressed and pressedKey > -1:
+        self.flush(data)
+      curses.napms(100)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

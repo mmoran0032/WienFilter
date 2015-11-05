@@ -6,7 +6,6 @@ from time import sleep
 import include
 from include.display import WFdisplay
 from include.model import WFmodel
-from include.monitor import WFmonitor
 
 import share
 from share.commands import commands
@@ -16,7 +15,7 @@ class WFcontroller(object):
   def __init__(self):
     self.model = WFmodel()
     self.display = WFdisplay()
-    self.refreshTime = 3
+    self.refreshTime = 0.5
     self.data = {}
 
   def __str__(self):
