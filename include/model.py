@@ -30,9 +30,9 @@ class WFmodel(object):
     return sock.recv(1024).decode()
 
   def determineSocket(self, supply):
-    if supply == "neg":
+    if supply == 0:
       return self.negativeSocket
-    elif supply == "pos":
+    elif supply == 1:
       return self.positiveSocket
 
   def closeConnection(self):

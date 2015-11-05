@@ -9,7 +9,6 @@ import sys
 
 class WFdisplay(object):
   def __init__(self):
-    self.refreshTime = 3
     self.size = (80, 24)
     self.screen = curses.initscr()
     self.initializeCurses()
@@ -38,14 +37,8 @@ class WFdisplay(object):
   def __str__(self):
     return "WF-Display: {}".format(self.data)
 
-  def display(self):
-    self.initializeLineColumn()
-
-  def initializeLineColumn(self):
-    self.line = 0
-    self.nextLine = 0
-    self.column = 0
-    self.nextColumn = 0
+  def display(self, data):
+    screenY, screenX = self.screen.getmaxyx()
 
   def updateData(self, data):
     self.data = data
