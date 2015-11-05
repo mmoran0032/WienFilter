@@ -38,10 +38,31 @@ sockets via a serial server located within the St. GEORGE target room and behind
 the Notre Dame firewall. For safety, the actual hosts and ports are not made
 public.
 
+Most commands query internal register values or change values held within those
+registers. The `WFcontroller` handles passing those actual commands to the
+`WFmodel`, while the user can input easy commands that are interpretted.
+
 
 Debugging
 ---------
 
 If need be, raw commands can be sent to either HV power supply. Since these are
 just the actual commands that interface with the supplies, any command available
-in the FuG Elektronik technical manual can be sent.
+in the FuG Elektronik technical manual can be sent. Some helpful commands are
+listed below, with *x = 0* being the voltage register and *x = 1* the current
+register. All registers can be queried by appending a `?` after the register
+name, and can be set by appending a value (unless the register is *Read Only*).
+
+- `>Sx`: register set value
+
+- `>SxA?`: actual value, integrated (Read Only)
+
+- `>Mx?`: monitor value, non-integrated (Read Only)
+
+- `>SxB`: ramp function type
+
+- `>KS?`: power supply status (Read Only)
+
+- `>DON?`: output release status (Read Only)
+
+- `Fy`: release (`1`) or turn off (`0`) power supply output
