@@ -43,6 +43,14 @@ registers. The `WFcontroller` handles passing those actual commands to the
 `WFmodel`, while the user can input easy commands that are interpretted.
 
 
+Limits
+------
+
+Nominal voltage limits for the power supplies are +/- 110 kV on each plate. A
+hardware current limit was set at +/- 1 uA. Values outside of these limits
+should be rejected by the power supply itself.
+
+
 Debugging
 ---------
 
