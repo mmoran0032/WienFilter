@@ -2,7 +2,9 @@
 
 from math import modf
 
-bars = [" ", " ", " ", " ", "|", "|", "|", "|", "|"]
+# bars = [" ", " ", " ", "|", "|", "|", "|", "█", "█"]
+# bars = [" ", " ", " ", " ", "|", "|", "|", "|", "|"]
+bars = [" ", " ", " ", " ", "█", "█", "█", "█", "█"]
 
 
 class Bar(object):
@@ -23,7 +25,7 @@ class Bar(object):
       whole += 1
     output = "{}{}".format(output, self.emptyChar*int(self.getSize() - whole))
     if self.withText:
-      output = "{0}{1:>5}%".format(output, self.percent)
+      output = "{0}{1:>6}%".format(output, self.percent)
     return output
 
   def getSize(self, decorated=False):
@@ -38,6 +40,3 @@ class Bar(object):
   def setPercent(self, value):
     if 0 <= value <= 100:
       self.percent = value
-
-  def getEnds(self):
-    return self.preChar, self.postChar
