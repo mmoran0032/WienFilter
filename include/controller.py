@@ -24,7 +24,9 @@ class WFcontroller(object):
   def run(self):
     while True:
       self.querySupplies()
-      self.display.display(self.data)
+      self.convertData()
+      self.display.receiveData(self.data)
+      self.display.display()
       sleep(self.refreshTime)
 
   def querySupplies(self):
@@ -36,12 +38,12 @@ class WFcontroller(object):
     self.positiveA = self.model.communicate(1, ">M1?")
 
   def convertData(self):
-    self.data["nOut"] = self.convertIndicator(self.negativeOutput)
-    self.data["pOut"] = self.convertIndicator(self.positiveOutput)
-    self.data["nV"] = self.convertNumber(self.negativeV)
-    self.data["nA"] = self.convertNumber(self.negativeA)
-    self.data["pV"] = self.convertNumber(self.positiveV)
-    self.data["pA"] = self.convertNumber(self.positiveA)
+    self.data["Negative"]["status"] = self.convertIndicator(self.negativeOutput)
+    self.data["Positive"]["status"] = self.convertIndicator(self.positiveOutput)
+    self.data["Negative"]["voltage"] = self.convertNumber(self.negativeV)
+    self.data["Negative"]["current"] = self.convertNumber(self.negativeA)
+    self.data["Positive"]["voltage"] = self.convertNumber(self.positiveV)
+    self.data["Positive"]["current"] = self.convertNumber(self.positiveA)
 
   def convertIndicator(self, indicator):
     ind = indicator.split(":")[1]

@@ -8,6 +8,10 @@ import sys
 class WFdisplay(object):
   def __init(self):
     self.initializeCurses()
+    self.status = {"Positive":
+                      {"status": 0, "voltage": 0, "current": 0, "rate": 0},
+                   "Negative":
+                      {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
 
   def initializeCurses(self):
     self.screen = curses.initscr()
@@ -19,6 +23,11 @@ class WFdisplay(object):
     curses.init_pair(2, curses.COLOR_RED, -1)
     curses.init_pair(3, curses.COLOR_GREEN, -1)
     curses.init_pair(4, curses.COLOR_BLUE, -1)
+
+  def assembleScreen(self):
+    self.createTitleAndMenu()
+    self.createStatusWindow()
+    self.addStatusReadback()
 
   def createTitleAndMenu(self):
     self.screen.addstr("WIEN FILTER MONITOR",
@@ -36,25 +45,37 @@ class WFdisplay(object):
                                             curses.COLS-2, 2, 1)
     self.status.box()
 
-  def addStatusReadback(self, status):
-    self.addSupply("Positive", status)
-    self.addSupply("Negative", status)
+  def addStatusReadback(self):
+    self.addSupply("Positive", self.status["Positive"], 4, 3)
+    self.addSupply("Negative", self.status["Negative"], 4, 8)
 
   def addSupply(self, supply, status, startX, startY):
     self.statusDisplay.attron(curses.A_BOLD | curses.color_pair(1))
-    self.addstr(startY, startX, "{} Power Supply".format(supply))
-    self.addstr(startY+1, startX,
-                "Voltage (kV): {}".format(status[supply]["voltage"]))
-    self.addstr(startY+2, startX,
-                "Current (μA): {}".format(status[supply]["current"]))
-    self.addstr(startY+3, startX,
-                "Ramp Rate (V/s): {}".format(status[supply]["rate"]))
+    self.statusDisplay.addstr(startY, startX, "{} Power Supply".format(supply))
+    self.statusDisplay.addstr(startY+1, startX, "Voltage (kV):")
+    self.statusDisplay.addstr(startY+2, startX, "Current (μA):")
+    self.statusDisplay.addstr(startY+3, startX, "Ramp Rate (V/s):")
+    self.statusDisplay.attroff(curses.A_BOLD)
+    self.statusDisplay.addstr(startY+1, startX+17,
+                              "{0:10.3f}".format(status["voltage"]))
+    self.statusDisplay.addstr(startY+1, startX+17,
+                              "{0:10.3f}".format(status["current"]))
+    self.statusDisplay.addstr(startY+1, startX+17,
+                              "{0:10.1f}".format(status["rate"]))
+
+  def display(self):
+    self.statusDisplay.clear()
+    self.addStatusReadback()
+    self.refreshDisplay()
 
   def refreshDisplay(self):
     self.screen.noutrefresh()
     self.status.noutrefresh()
     self.statusDisplay.noutrefresh()
     curses.doupdate()
+
+  def receiveData(self, data):
+    self.status = data
 
   def end(self):
     curses.echo()
