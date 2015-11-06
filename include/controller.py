@@ -3,7 +3,6 @@
 
 from time import sleep
 
-import include
 from include.display import WFdisplay
 from include.model import WFmodel
 

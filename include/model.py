@@ -3,7 +3,6 @@
 
 import socket
 
-import share
 from share.config import negativeAddress, positiveAddress
 
 
@@ -26,13 +25,20 @@ class WFmodel(object):
   def communicate(self, supply, command):
     sock = self.determineSocket(supply)
     sock.send(command.encode())
-    return sock.recv(1024).decode()
+    data = self.readUntilEnd(sock)
+    return data
 
   def determineSocket(self, supply):
     if supply == 0:
       return self.negativeSocket
     elif supply == 1:
       return self.positiveSocket
+
+  def readUntilEnd(self, sock):
+    message = ""
+    while "\n" not in message:
+      pass
+
 
   def closeConnection(self):
     self.closeSocket(self.negativeSocket)
