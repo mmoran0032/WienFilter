@@ -31,4 +31,33 @@ class WFdisplay(object):
     self.screen.chgat(curses.LINES-1, 40, curses.A_BOLD | curses.color_pair(2))
 
   def createStatusWindow(self):
-    status = curses.newwindow(curses.LINES-2, curses.COLS, 1, 0)
+    self.status = curses.newwindow(curses.LINES-2, curses.COLS, 1, 0)
+    self.statusDisplay = self.status.subwin(curses.LINES-4,
+                                            curses.COLS-2, 2, 1)
+    self.status.box()
+
+  def addStatusReadback(self, status):
+    self.addSupply("Positive", status)
+    self.addSupply("Negative", status)
+
+  def addSupply(self, supply, status, startX, startY):
+    self.statusDisplay.attron(curses.A_BOLD | curses.color_pair(1))
+    self.addstr(startY, startX, "{} Power Supply".format(supply))
+    self.addstr(startY+1, startX,
+                "Voltage (kV): {}".format(status[supply]["voltage"]))
+    self.addstr(startY+2, startX,
+                "Current (μA): {}".format(status[supply]["current"]))
+    self.addstr(startY+3, startX,
+                "Ramp Rate (V/s): {}".format(status[supply]["rate"]))
+
+  def refreshDisplay(self):
+    self.screen.noutrefresh()
+    self.status.noutrefresh()
+    self.statusDisplay.noutrefresh()
+    curses.doupdate()
+
+  def end(self):
+    curses.echo()
+    curses.nocbreak()
+    curses.curs_set(0)
+    curses.endwin()
