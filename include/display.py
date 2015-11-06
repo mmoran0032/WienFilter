@@ -8,10 +8,8 @@ import sys
 class WFdisplay(object):
   def __init(self):
     self.initializeCurses()
-    self.status = {"Positive":
-                      {"status": 0, "voltage": 0, "current": 0, "rate": 0},
-                   "Negative":
-                      {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
+    self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
+                   "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
 
   def initializeCurses(self):
     self.screen = curses.initscr()
@@ -46,8 +44,8 @@ class WFdisplay(object):
     self.status.box()
 
   def addStatusReadback(self):
-    self.addSupply("Positive", self.status["Positive"], 4, 3)
-    self.addSupply("Negative", self.status["Negative"], 4, 8)
+    self.addSupply("Positive", self.status["Pos"], 4, 3)
+    self.addSupply("Negative", self.status["Neg"], 4, 8)
 
   def addSupply(self, supply, status, startX, startY):
     self.statusDisplay.attron(curses.A_BOLD | curses.color_pair(1))
