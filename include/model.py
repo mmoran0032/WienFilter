@@ -7,9 +7,10 @@ from share.config import negativeAddress, positiveAddress
 
 
 class WFmodel(object):
-  def __init__(self):
-    self.negativeSocket = self.createAndConnectSocket(negativeAddress)
-    self.positiveSocket = self.createAndConnectSocket(positiveAddress)
+  def __init__(self, negAddr=negativeAddress, posAddr=positiveAddress):
+    self.negativeSocket = self.createAndConnectSocket(negAddr)
+    self.positiveSocket = self.createAndConnectSocket(posAddr)
+    self.previous = "No previous message"
 
   def __str__(self):
     return "WF-Model: {}, {}".format(self.negativeSocket.getsockname(),
@@ -36,9 +37,18 @@ class WFmodel(object):
 
   def readUntilEnd(self, sock):
     message = ""
-    while "\n" not in message:
-      pass
+    while not self.endOfMessage(message):
+      self.previous = message
+      single = sock.recv(1).decode()
+      message = "{}{}".format(message, single)
+    return message
 
+  def endOfMessage(self, message):
+    if message == self.previous:
+      self.previous = message
+      return True
+    else:
+      return False
 
   def closeConnection(self):
     self.closeSocket(self.negativeSocket)
