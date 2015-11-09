@@ -5,11 +5,7 @@ import include
 from include.controller import WFcontroller
 
 
-def main():
+if __name__ == "__main__":
   controller = WFcontroller()
   print(controller)
   controller.run()
-
-
-if __name__ == "__main__":
-  main()
