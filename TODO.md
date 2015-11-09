@@ -1,8 +1,11 @@
 TODO
 ====
 
-- fix TCP socket recv
+- fix TCP socket recv (untested on actual power supply, but tested with dummy
+  server emulating responses)
 
-- handle user input
+- check `curses` output of values
 
 - include Bar in output display (for voltage and current)
+
+- handle user input

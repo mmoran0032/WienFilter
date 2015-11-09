@@ -7,6 +7,7 @@ from include.controller import WFcontroller
 
 def main():
   controller = WFcontroller()
+  print(controller)
   controller.run()
 
 

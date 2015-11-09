@@ -11,6 +11,9 @@ class WFdisplay(object):
     self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
                    "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
 
+  def __str__(self):
+    return "WF-display, using curses {}".format(curses.version.decode())
+
   def initializeCurses(self):
     self.screen = curses.initscr()
     curses.start_color()
