@@ -26,7 +26,6 @@ class WFmodel(object):
 
   def communicate(self, supply, command):
     sock = self.determineSocket(supply)
-    command = self.verifyAndAdjustCommand(command)
     sock.send(command.encode())
     data = sock.recv(64).decode()[:-1]
     return data
@@ -36,12 +35,6 @@ class WFmodel(object):
       return self.negativeSocket
     elif supply == 1:
       return self.positiveSocket
-
-  def verifyAndAdjustCommand(self, command):
-    if command[-1] == "\r":
-      return command
-    else:
-      return "{}\r".format(command)
 
   def closeConnection(self):
     self.closeSocket(self.negativeSocket)

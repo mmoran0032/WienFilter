@@ -26,12 +26,12 @@ class WFcontroller(object):
       sleep(self.refreshTime)
 
   def querySupplies(self):
-    self.negativeOutput = self.model.communicate(0, ">DON?")
-    self.positiveOutput = self.model.communicate(1, ">DON?")
-    self.negativeV = self.model.communicate(0, ">M0?")
-    self.negativeA = self.model.communicate(0, ">M1?")
-    self.positiveV = self.model.communicate(1, ">M0?")
-    self.positiveA = self.model.communicate(1, ">M1?")
+    self.negativeOutput = self.model.communicate(0, ">DON?\r")
+    self.positiveOutput = self.model.communicate(1, ">DON?\r")
+    self.negativeV = self.model.communicate(0, ">M0?\r")
+    self.negativeA = self.model.communicate(0, ">M1?\r")
+    self.positiveV = self.model.communicate(1, ">M0?\r")
+    self.positiveA = self.model.communicate(1, ">M1?\r")
 
   def convertData(self):
     self.data["Neg"]["status"] = self.convertIndicator(self.negativeOutput)
