@@ -6,10 +6,9 @@ import sys
 
 
 class WFdisplay(object):
-  def __init(self):
+  def __init__(self, status):
     self.initializeCurses()
-    self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
-                   "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
+    self.status = status
 
   def __str__(self):
     return "WF-display, using curses {}".format(curses.version.decode())
