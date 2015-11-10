@@ -9,6 +9,7 @@ class WFdisplay(object):
   def __init__(self, status):
     self.initializeCurses()
     self.receiveData(status)
+    self.assembleScreen()
 
   def __str__(self):
     return "WF-display, using curses {}".format(curses.version.decode())
@@ -40,7 +41,7 @@ class WFdisplay(object):
     self.screen.chgat(curses.LINES-1, 40, curses.A_BOLD | curses.color_pair(2))
 
   def createStatusWindow(self):
-    self.statusWindow = curses.newwindow(curses.LINES-2, curses.COLS, 1, 0)
+    self.statusWindow = curses.newwin(curses.LINES-2, curses.COLS, 1, 0)
     self.statusDisplay = self.statusWindow.subwin(curses.LINES-4,
                                                   curses.COLS-2, 2, 1)
     self.statusWindow.box()
