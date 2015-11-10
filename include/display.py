@@ -24,6 +24,7 @@ class WFdisplay(object):
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(4, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLUE)
 
   def assembleScreen(self):
     self.createTitleAndMenu()
@@ -31,9 +32,9 @@ class WFdisplay(object):
     self.addStatusReadback()
 
   def createTitleAndMenu(self):
-    self.screen.addstr("WIEN FILTER MONITOR",
-                       curses.A_REVERSE | curses.color_pair(4))
-    self.screen.chgat(-1, curses.A_REVERSE)
+    self.screen.addstr("  WIEN FILTER MONITOR",
+                       curses.A_BOLD | curses.color_pair(5))
+    self.screen.chgat(-1, curses.color_pair(5))
     self.screen.addstr(curses.LINES-1, 0,
                        "'E' edit values, 'C' close connection, 'Q' shutdown")
     self.screen.chgat(curses.LINES-1, 1, curses.A_BOLD | curses.color_pair(3))
