@@ -1,7 +1,6 @@
 # model - provides WFmodel for TCP interaction with power supplies
 
 
-from itertools import takewhile
 import socket
 
 from share.config import negativeAddress, positiveAddress
