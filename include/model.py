@@ -1,6 +1,7 @@
 # model - provides WFmodel for TCP interaction with power supplies
 
 
+from itertools import takewhile
 import socket
 
 from share.config import negativeAddress, positiveAddress
@@ -26,7 +27,7 @@ class WFmodel(object):
   def communicate(self, supply, command):
     sock = self.determineSocket(supply)
     sock.send(command.encode())
-    data = sock.recv(64).decode()[:-1]
+    data = self.readAllData(sock)
     return data
 
   def determineSocket(self, supply):
@@ -34,6 +35,12 @@ class WFmodel(object):
       return self.negativeSocket
     elif supply == 1:
       return self.positiveSocket
+
+  def readAllData(self, sock):
+    data = ""
+    while "\n" not in data:
+      data = "{}{}".format(data, sock.recv(1024).decode())
+    return data[:-1]
 
   def closeConnection(self):
     self.closeSocket(self.negativeSocket)
