@@ -4,7 +4,6 @@
 import socket
 
 from share.config import negativeAddress, positiveAddress
-#from share.testconfig import negativeAddress, positiveAddress
 
 
 class WFmodel(object):
