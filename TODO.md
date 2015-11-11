@@ -7,4 +7,4 @@ TODO
 
 - include Bar in output display (for voltage and current)
 
-- handle user input
+- handle user input for setvalues

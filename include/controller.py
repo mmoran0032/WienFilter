@@ -9,22 +9,17 @@ from include.model import WFmodel
 
 class WFcontroller(object):
   def __init__(self):
-    self.refreshTime = 0.5
     self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
                    "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
     self.model = WFmodel()
-    self.display = WFdisplay(self.status)
+    self.display = WFdisplay(self, self.status)
 
   def __str__(self):
     return "WF: {}\n    {}".format(self.model, self.display)
 
   def run(self):
-    while self.display.isUpdating:
-      self.querySupplies()
-      self.convertData()
-      self.display.receiveData(self.status)
-      self.display.display()
-      sleep(self.refreshTime)
+    _ = self.getCurrentStatus()
+    self.display.display()
 
   def querySupplies(self):
     self.negativeOutput = self.model.communicate(0, ">DON?\n")
@@ -52,3 +47,8 @@ class WFcontroller(object):
     num = float(number.split(":")[1])
     num *= 10**power
     return num
+
+  def getCurrentStatus(self):
+    self.querySupplies()
+    self.convertData()
+    return self.status

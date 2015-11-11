@@ -6,10 +6,12 @@ import sys
 
 
 class WFdisplay(object):
-  def __init__(self, status):
+  def __init__(self, controller, status):
     self.isUpdating = True
+    self.refreshTime = 0.5
+    self.controller = controller
     self.initializeCurses()
-    self.receiveData(status)
+    self.status = self.controller.getCurrentStatus()
     self.assembleScreen()
 
   def __str__(self):
@@ -49,6 +51,7 @@ class WFdisplay(object):
     self.statusWindow = curses.newwin(curses.LINES-2, curses.COLS, 1, 0)
     self.statusDisplay = self.statusWindow.subwin(curses.LINES-4,
                                                   curses.COLS-2, 2, 1)
+    self.statusWindow.nodelay(True)
     self.statusWindow.box()
 
   def addStatusReadback(self):
@@ -70,13 +73,16 @@ class WFdisplay(object):
                               "{0:10.1f}".format(status["rate"]))
 
   def display(self):
-    self.statusDisplay.clear()
-    self.addStatusReadback()
-    self.refreshDisplay()
-    self.handleKeypress()
+    while self.isUpdating:
+      self.statusDisplay.clear()
+      self.status = self.controller.getCurrentStatus()
+      self.addStatusReadback()
+      self.refreshDisplay()
+      key = self.statusWindow.getch()
+      if key != -1:
+        self.handleKeypress(key)
 
-  def handleKeypress(self):
-    key = self.statusWindow.getch()
+  def handleKeypress(self, key):
     if key in (ord("q"), ord("Q")):
       self.end()
 
@@ -85,9 +91,6 @@ class WFdisplay(object):
     self.statusWindow.noutrefresh()
     self.statusDisplay.noutrefresh()
     curses.doupdate()
-
-  def receiveData(self, data):
-    self.status = data
 
   def end(self):
     curses.nocbreak()
