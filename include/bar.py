@@ -8,10 +8,10 @@ bars = [" ", " ", " ", " ", "█", "█", "█", "█", "█"]
 
 
 class Bar(object):
-  def __init__(self, size, preChar="[", postChar="]", emptyChar=" ",
+  def __init__(self, size, percent=0, preChar="[", postChar="]", emptyChar=" ",
                withText=True):
     self.size = size
-    self.percent = 0
+    self.percent = percent
     self.preChar = preChar
     self.postChar = postChar
     self.emptyChar = emptyChar
@@ -25,7 +25,7 @@ class Bar(object):
       whole += 1
     output = "{}{}".format(output, self.emptyChar*int(self.getSize() - whole))
     if self.withText:
-      output = "{0}{1:>6}%".format(output, self.percent)
+      output = "{0}{1:>6.2f}%".format(output, self.percent)
     return output
 
   def getSize(self, decorated=False):

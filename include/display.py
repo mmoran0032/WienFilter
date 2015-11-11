@@ -2,7 +2,9 @@
 
 
 import curses
-import sys
+from time import sleep
+
+from include.bar import Bar
 
 
 class WFdisplay(object):
@@ -71,6 +73,10 @@ class WFdisplay(object):
                               "{0:10.3f}".format(status["current"]))
     self.statusDisplay.addstr(startY+3, startX+17,
                               "{0:10.1f}".format(status["rate"]))
+    voltageBar = Bar(35, status["voltage"]/110.0)
+    currentBar = Bar(35, status["current"]/2.0)
+    self.statusDisplay.addstr(startY+1, startX+35, str(voltageBar))
+    self.statusDisplay.addstr(startY+2, startX+35, str(currentBar))
 
   def display(self):
     while self.isUpdating:
@@ -81,6 +87,7 @@ class WFdisplay(object):
       key = self.statusWindow.getch()
       if key != -1:
         self.handleKeypress(key)
+      sleep(self.refreshTime)
 
   def handleKeypress(self, key):
     if key in (ord("q"), ord("Q")):

@@ -1,8 +1,6 @@
 # controller - provides WFcontroller to process info from user and model
 
 
-from time import sleep
-
 from include.display import WFdisplay
 from include.model import WFmodel
 
