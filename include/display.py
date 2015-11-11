@@ -37,9 +37,12 @@ class WFdisplay(object):
     self.screen.chgat(-1, curses.color_pair(5))
     self.screen.addstr(curses.LINES-1, 0,
                        "'E' edit values, 'C' close connection, 'Q' shutdown")
-    self.screen.chgat(curses.LINES-1, 1, curses.A_BOLD | curses.color_pair(3))
-    self.screen.chgat(curses.LINES-1, 18, curses.A_BOLD | curses.color_pair(3))
-    self.screen.chgat(curses.LINES-1, 40, curses.A_BOLD | curses.color_pair(2))
+    self.screen.chgat(curses.LINES-1, 1, 1,
+                      curses.A_BOLD | curses.color_pair(3))
+    self.screen.chgat(curses.LINES-1, 18, 1,
+                      curses.A_BOLD | curses.color_pair(3))
+    self.screen.chgat(curses.LINES-1, 40, 1,
+                      curses.A_BOLD | curses.color_pair(2))
 
   def createStatusWindow(self):
     self.statusWindow = curses.newwin(curses.LINES-2, curses.COLS, 1, 0)
@@ -60,15 +63,19 @@ class WFdisplay(object):
     self.statusDisplay.attroff(curses.A_BOLD)
     self.statusDisplay.addstr(startY+1, startX+17,
                               "{0:10.3f}".format(status["voltage"]))
-    self.statusDisplay.addstr(startY+1, startX+17,
+    self.statusDisplay.addstr(startY+2, startX+17,
                               "{0:10.3f}".format(status["current"]))
-    self.statusDisplay.addstr(startY+1, startX+17,
+    self.statusDisplay.addstr(startY+3, startX+17,
                               "{0:10.1f}".format(status["rate"]))
 
   def display(self):
+    self.handleKeypress()
     self.statusDisplay.clear()
     self.addStatusReadback()
     self.refreshDisplay()
+
+  def handleKeypress(self):
+    pass
 
   def refreshDisplay(self):
     self.screen.noutrefresh()
