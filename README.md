@@ -43,6 +43,17 @@ registers. The `WFcontroller` handles passing those actual commands to the
 `WFmodel`, while the user can input easy commands that are interpretted.
 
 
+Config File
+-----------
+
+The Monitor gets the connection information from `share/config.py`, which is
+formatted like the following, with `portX` being integers:
+```python
+host = "url.for.power.supplies"
+negativeAddress = (host, port1)
+positiveAddress = (host, port2)
+```
+
 Limits
 ------
 
