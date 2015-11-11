@@ -19,7 +19,7 @@ class WFcontroller(object):
     return "WF: {}\n    {}".format(self.model, self.display)
 
   def run(self):
-    while True:
+    while self.display.isUpdating:
       self.querySupplies()
       self.convertData()
       self.display.receiveData(self.status)

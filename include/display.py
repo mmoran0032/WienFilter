@@ -7,6 +7,7 @@ import sys
 
 class WFdisplay(object):
   def __init__(self, status):
+    self.isUpdating = True
     self.initializeCurses()
     self.receiveData(status)
     self.assembleScreen()
@@ -69,13 +70,15 @@ class WFdisplay(object):
                               "{0:10.1f}".format(status["rate"]))
 
   def display(self):
-    self.handleKeypress()
     self.statusDisplay.clear()
     self.addStatusReadback()
     self.refreshDisplay()
+    self.handleKeypress()
 
   def handleKeypress(self):
-    pass
+    key = self.statusWindow.getch()
+    if key in (ord("q"), ord("Q")):
+      self.end()
 
   def refreshDisplay(self):
     self.screen.noutrefresh()
@@ -87,7 +90,8 @@ class WFdisplay(object):
     self.status = data
 
   def end(self):
-    curses.echo()
     curses.nocbreak()
-    curses.curs_set(0)
+    curses.echo()
+    curses.curs_set(1)
     curses.endwin()
+    self.isUpdating = False
