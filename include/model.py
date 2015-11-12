@@ -1,4 +1,4 @@
-# model - provides WFmodel for TCP interaction with power supplies
+# model - provides WFModel for TCP interaction with power supplies
 
 
 import socket

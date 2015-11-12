@@ -1,4 +1,4 @@
-# controller - provides WFcontroller to process info from user and model
+# controller - provides WFController to process info from user and model
 
 
 from include.display import WFDisplay

@@ -39,8 +39,8 @@ the Notre Dame firewall. For safety, the actual hosts and ports are not made
 public.
 
 Most commands query internal register values or change values held within those
-registers. The `WFcontroller` handles passing those actual commands to the
-`WFmodel`, while the user can input easy commands that are interpretted.
+registers. The `WFController` handles passing those actual commands to the
+`WFModel`, while the user can input easy commands that are interpretted.
 
 
 Config File

@@ -1,3 +1,4 @@
+# bar - provides Bar for visually displaying percentages and loads
 
 
 from math import modf

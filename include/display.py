@@ -1,4 +1,4 @@
-# display - provides WFdisplay to show values for power supplies
+# display - provides WFDisplay to show values for power supplies
 
 
 import curses
