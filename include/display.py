@@ -63,30 +63,37 @@ class WFDisplay(object):
     def addSupply(self, window, supply, status, startX, startY):
         window.attron(curses.A_BOLD | curses.color_pair(1))
         window.addstr(startY, startX, "{} Power Supply".format(supply))
-        window.addstr(startY + 2, startX + 2, "Voltage (kV):")
-        window.addstr(startY + 3, startX + 2, "Current (μA):")
-        window.addstr(startY + 5, startX + 2, "Ramp Rate (V/s):")
-        window.addstr(startY + 6, startX + 2, "Status:")
+        window.addstr(startY + 2, startX + 1, "Voltage (kV):")
+        window.addstr(startY + 3, startX + 1, "Current (μA):")
+        window.addstr(startY + 5, startX + 1, "Ramp Rate:")
+        window.addstr(startY + 6, startX + 1, "Status:")
         window.attroff(curses.A_BOLD)
-        window.addstr(startY + 2, startX + 19,
-                      "{0:10.3f}".format(status["voltage"]))
-        window.addstr(startY + 3, startX + 19,
-                      "{0:10.3f}".format(status["current"]))
-        window.addstr(startY + 5, startX + 19,
-                      "{0:10d}".format(status["rate"]))
-        window.addstr(startY + 6, startX + 19,
-                      "{0:>10s}".format(status["status"]))
-        self.addBar(window, status["voltage"], 110.0, startY + 2, startX + 37)
-        self.addBar(window, status["current"], 2.0, startY + 3, startX + 37)
+        window.addstr(startY + 2, startX + 18,
+                      "{0:8.3f}".format(status["voltage"]))
+        window.addstr(startY + 2, startX + 30,
+                      "{0:8.3f}".format(status["voltage"]))
+        window.addstr(startY + 3, startX + 18,
+                      "{0:8.3f}".format(status["current"]))
+        window.addstr(startY + 3, startX + 30,
+                      "{0:8.3f}".format(status["current"]))
+        window.addstr(startY + 5, startX + 18,
+                      "{0:8d}".format(status["rate"]))
+        window.addstr(startY + 5, startX + 30,
+                      "{0:8d}".format(status["rate"]), curses.A_BOLD)
+        window.addstr(startY + 6, startX + 18,
+                      "{0:>8s}".format(status["status"]))
+        self.addBar(window, status["voltage"], 110.0, startY + 2, startX + 42)
+        self.addBar(window, status["current"], 2.0, startY + 3, startX + 42)
         window.box()
 
     def addBar(self, window, value, maximum, y, x):
         percent = abs(value) / float(maximum) * 100
-        bar = Bar(33, percent)
+        bar = Bar(30, percent)
+        window.addstr(y, x, str(bar))
         if percent > 75:
-            window.addstr(y, x, str(bar), curses.A_BOLD | curses.color_pair(2))
+            window.chgat(y, x - 12, curses.A_BOLD | curses.color_pair(2))
         else:
-            window.addstr(y, x, str(bar), curses.A_BOLD | curses.color_pair(3))
+            window.chgat(y, x - 12, curses.A_BOLD | curses.color_pair(3))
 
     def display(self):
         while self.isUpdating:

@@ -27,13 +27,13 @@ class Bar(object):
             whole += 1
         output = "{}{}".format(output, self.emptyChar * int(self.size - whole))
         if self.withText:
-            output = "{0}{1:>6.2f}%".format(output, self.percent)
+            output = "{0}{1:>5.1f}%".format(output, self.percent)
         return output
 
     @property
     def size(self):
         if self.withText:
-            return self._size - 6
+            return self._size - 5
         else:
             return self._size
 
