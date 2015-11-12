@@ -21,8 +21,12 @@ class WFController(object):
         return "WF: {}\n    {}".format(self.model, self.display)
 
     def run(self):
-        _ = self.getCurrentStatus()
-        self.display.display()
+        try:
+            self.display.initialize()
+            self.display.display()
+        except:
+            self.display.end()
+            raise
 
     def querySupplies(self):
         self.querySingleSupply(self.posModel, "Pos")
@@ -35,15 +39,15 @@ class WFController(object):
             "current": supply.communicate(">M1?\n")
         }
 
-    def convertData(self):
-        self.status["Neg"]["status"] = self.convertIndicator(
-            self.negativeOutput)
-        self.status["Pos"]["status"] = self.convertIndicator(
-            self.positiveOutput)
-        self.status["Neg"]["voltage"] = self.convertNumber(self.negativeV, -3)
-        self.status["Neg"]["current"] = self.convertNumber(self.negativeA, 6)
-        self.status["Pos"]["voltage"] = self.convertNumber(self.positiveV, -3)
-        self.status["Pos"]["current"] = self.convertNumber(self.positiveA, 6)
+    def convertAllData(self):
+        self.status["Pos"] = convertData(self.status["Pos"])
+        self.status["Neg"] = convertData(self.status["Neg"])
+
+    def convertData(self, subStatus):
+        newStatus["status"] = self.convertIndicator(subStatus["status"])
+        newStatus["voltage"] = self.convertNumber(subStatus["voltage"], -3)
+        newStatus["current"] = self.convertNumber(subStatus["current"], 6)
+        return newStatus
 
     def convertIndicator(self, indicator):
         ind = indicator.split(":")[1]
@@ -58,5 +62,5 @@ class WFController(object):
 
     def getCurrentStatus(self):
         self.querySupplies()
-        self.convertData()
+        self.convertAllData()
         return self.status

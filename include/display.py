@@ -13,12 +13,14 @@ class WFDisplay(object):
         self.isUpdating = True
         self.refreshTime = 0.5
         self.controller = controller
-        self.initializeCurses()
-        self.status = self.controller.getCurrentStatus()
-        self.assembleScreen()
 
     def __str__(self):
         return "WF-display, using curses {}".format(curses.version.decode())
+
+    def initialize(self):
+        self.initializeCurses()
+        self.status = self.controller.getCurrentStatus()
+        self.assembleScreen()
 
     def initializeCurses(self):
         self.screen = curses.initscr()

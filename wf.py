@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 
-import include
-from include.controller import WFcontroller
+from include.controller import WFController
 
 
 if __name__ == "__main__":
-    controller = WFcontroller()
+    controller = WFController()
     controller.run()
