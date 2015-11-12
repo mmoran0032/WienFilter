@@ -15,21 +15,29 @@ class WFModel(object):
 
     def createAndConnectSocket(self, address):
         try:
-            s = socket.create_connection(address, timeout=25)
+            s = socket.create_connection(address, timeout=5)
             return s
         except socket.timeout:
+            print("timeout exceeed for establishing connection\n")
+            raise
+        except socket.gaierror:
+            print("address not found\n")
             raise
 
     def communicate(self, command):
-        sock.send(command.encode())
-        data = self.readAllData(sock)
-        return data
+        try:
+            self.socket.send(command.encode())
+            data = self.readAllData()
+            return data
+        except socket.timeout:
+            print("communication timed out\n")
+            raise
 
-    def readAllData(self, sock):
+    def readAllData(self):
         data = ""
         while "\n" not in data:
-            data = "{}{}".format(data, sock.recv(1024).decode())
+            data = "{}{}".format(data, self.socket.recv(1024).decode())
         return data[:-1]
 
     def disconnect(self):
-        sock.close()
+        self.socket.close()

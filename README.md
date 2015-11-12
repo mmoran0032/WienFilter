@@ -65,6 +65,15 @@ be rejected by the power supply itself.
 Debugging
 ---------
 
+Parts of the program can be tested using the scripts contained within `tests`,
+which act to compartmentalize different portions of the program. In particular,
+`testDisplay.py` is particularly useful when messing with the look of the
+monitor.
+
+To run these test, execute `python3 -m tests.testX` from the project's root
+directory (`/some/path/WienFilter`). The output from the tests should be
+self-explanatory.
+
 If need be, raw commands can be sent to either HV power supply. Since these are
 just the actual commands that interface with the supplies, any command available
 in the FuG Elektronik technical manual can be sent. Some helpful commands are
@@ -85,3 +94,4 @@ name, and can be set by appending a value (unless the register is *Read Only*).
 - `>DON?`: output release status (Read Only)
 
 - `Fy`: release (`1`) or turn off (`0`) power supply output
+
