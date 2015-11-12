@@ -49,7 +49,6 @@ class WFDisplay(object):
         self.ppsDisplay = self.statusWindow.subwin(9, curses.COLS - 4, 2, 2)
         self.npsDisplay = self.statusWindow.subwin(9, curses.COLS - 4, 12, 2)
         self.statusWindow.nodelay(True)
-        self.statusWindow.box()
 
     def addStatusReadback(self):
         self.addSupply(self.ppsDisplay, "Positive", self.status["Pos"], 1, 1)

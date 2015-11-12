@@ -9,6 +9,7 @@ class WFModel(object):
     def __init__(self, address):
         self.socket = self.createAndConnectSocket(address)
         self.previous = "No previous message"
+        self.connected = False
 
     def __str__(self):
         return "WF-Model: {}".format(self.socket.getsockname())
@@ -16,6 +17,7 @@ class WFModel(object):
     def createAndConnectSocket(self, address):
         try:
             s = socket.create_connection(address, timeout=5)
+            self.connected = True
             return s
         except socket.timeout:
             print("timeout exceeed for establishing connection\n")
@@ -41,3 +43,4 @@ class WFModel(object):
 
     def disconnect(self):
         self.socket.close()
+        self.connected = False
