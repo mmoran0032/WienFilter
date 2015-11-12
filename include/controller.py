@@ -23,8 +23,8 @@ class WFController(object):
         self.selection = None
 
     def __str__(self):
-        return "WF: {} {}\n    {}".format(self.posModel, self.negModel,
-                                          self.display)
+        return "WFController: {} {}\n    {}".format(
+            self.posModel, self.negModel, self.display)
 
     def run(self):
         try:
@@ -35,8 +35,10 @@ class WFController(object):
             raise
 
     def querySupplies(self):
-        self.querySingleSupply(self.posModel, "Pos")
-        self.querySingleSupply(self.negModel, "Neg")
+        if self.posModel.connected:
+            self.querySingleSupply(self.posModel, "Pos")
+        if self.negModel.connected:
+            self.querySingleSupply(self.negModel, "Neg")
 
     def querySingleSupply(self, supply, name):
         self._status[name] = {

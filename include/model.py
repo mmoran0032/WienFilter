@@ -13,9 +13,11 @@ class WFModel(object):
         self.connected = False
 
     def __str__(self):
-        return "WF-Model: {}".format(self.socket.getsockname())
+        return "WFModel: {}".format(self.socket.getsockname())
 
-    def createAndConnectSocket(self, address=self.address):
+    def createAndConnectSocket(self, address=None):
+        if address is None:
+            address = self.address
         try:
             s = socket.create_connection(address, timeout=5)
             self.connected = True

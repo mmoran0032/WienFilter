@@ -15,7 +15,7 @@ class WFDisplay(object):
         self.controller = controller
 
     def __str__(self):
-        return "WF-display, using curses {}".format(curses.version.decode())
+        return "WFDisplay, using curses {}".format(curses.version.decode())
 
     def initialize(self):
         self.initializeCurses()
