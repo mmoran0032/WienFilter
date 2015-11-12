@@ -9,7 +9,7 @@ from share.config import negativeAddress, positiveAddress
 class WFController(object):
 
     def __init__(self):
-        self.status = {
+        self._status = {
             "Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
             "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}
         }
@@ -33,15 +33,15 @@ class WFController(object):
         self.querySingleSupply(self.negModel, "Neg")
 
     def querySingleSupply(self, supply, name):
-        self.status[name] = {
+        self._status[name] = {
             "status": supply.communicate(">KS?\n"),
             "voltage": supply.communicate(">M0?\n"),
             "current": supply.communicate(">M1?\n")
         }
 
     def convertAllData(self):
-        self.status["Pos"] = convertData(self.status["Pos"])
-        self.status["Neg"] = convertData(self.status["Neg"])
+        self._status["Pos"] = convertData(self._status["Pos"])
+        self._status["Neg"] = convertData(self._status["Neg"])
 
     def convertData(self, subStatus):
         newStatus["status"] = self.convertIndicator(subStatus["status"])
@@ -60,7 +60,8 @@ class WFController(object):
         num *= 10 ** power
         return num
 
-    def getCurrentStatus(self):
+    @property
+    def status(self):
         self.querySupplies()
         self.convertAllData()
-        return self.status
+        return self._status

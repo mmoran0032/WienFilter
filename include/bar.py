@@ -11,34 +11,36 @@ class Bar(object):
 
     def __init__(self, size, percent=0, preChar="[", postChar="]",
                  emptyChar=" ", withText=True):
-        self.size = size
-        self.percent = percent
+        self._size = size
+        self._percent = percent
         self.preChar = preChar
         self.postChar = postChar
         self.emptyChar = emptyChar
         self.withText = withText
 
     def __str__(self):
-        frac, whole = modf(self.getSize() * self.getPercent() / 100.0)
+        frac, whole = modf(self.size * self.percent / 100.0)
         output = bars[8] * int(whole)
         if frac > 0:
             output += bars[int(frac * 8)]
             whole += 1
-        output = "{}{}".format(output, self.emptyChar *
-                               int(self.getSize() - whole))
+        output = "{}{}".format(output, self.emptyChar * int(self.size - whole))
         if self.withText:
             output = "{0}{1:>6.2f}%".format(output, self.percent)
         return output
 
-    def getSize(self, decorated=False):
+    @property
+    def size(self, decorated=False):
         if decorated:
-            return self.size
+            return self._size
         if self.withText:
-            return self.size - 6
+            return self._size - 6
 
-    def getPercent(self):
-        return self.percent
+    @property
+    def percent(self):
+        return self._percent
 
-    def setPercent(self, value):
+    @percent.setter
+    def percent(self, value):
         if 0 <= value <= 100:
-            self.percent = value
+            self._percent = value

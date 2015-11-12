@@ -6,8 +6,8 @@ from include.display import WFDisplay
 
 class DummyController(object):
 
-    def getCurrentStatus(self):
-        return {
+    def __init__(self):
+        self._status = {
             "Pos": {
                 "status": "0110001",
                 "voltage": 88.776,
@@ -22,7 +22,16 @@ class DummyController(object):
             }
         }
 
+    @property
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        self._status = value
+
 
 if __name__ == "__main__":
     d = WFDisplay(DummyController())
+    d.initialize()
     d.display()

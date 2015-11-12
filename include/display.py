@@ -19,7 +19,7 @@ class WFDisplay(object):
 
     def initialize(self):
         self.initializeCurses()
-        self.status = self.controller.getCurrentStatus()
+        self.status = self.controller.status
         self.assembleScreen()
 
     def initializeCurses(self):
@@ -94,7 +94,7 @@ class WFDisplay(object):
         while self.isUpdating:
             self.ppsDisplay.clear()
             self.npsDisplay.clear()
-            self.status = self.controller.getCurrentStatus()
+            self.status = self.controller.status
             self.addStatusReadback()
             self.refreshDisplay()
             key = self.statusWindow.getch()
