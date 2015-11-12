@@ -76,21 +76,11 @@ class WFDisplay(object):
                       "{0:10d}".format(status["rate"]))
         window.addstr(startY + 6, startX + 19,
                       "{0:>10s}".format(status["status"]))
-        self.createAndAddBar(
-            window,
-            status["voltage"],
-            110.0,
-            startY + 2,
-            startX + 37)
-        self.createAndAddBar(
-            window,
-            status["current"],
-            2.0,
-            startY + 3,
-            startX + 37)
+        self.addBar(window, status["voltage"], 110.0, startY + 2, startX + 37)
+        self.addBar(window, status["current"], 2.0, startY + 3, startX + 37)
         window.box()
 
-    def createAndAddBar(self, window, value, maximum, y, x):
+    def addBar(self, window, value, maximum, y, x):
         percent = abs(value) / float(maximum) * 100
         bar = Bar(33, percent)
         if percent > 75:
