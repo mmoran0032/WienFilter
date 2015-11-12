@@ -36,18 +36,24 @@ class WFDisplay(object):
 
     def assembleScreen(self):
         self.createTitle()
+        self.createGlobalOptions()
         self.createStatusWindow()
         self.addStatusReadback()
 
     def createTitle(self):
-        self.screen.addstr(0, 0, "  WIEN FILTER MONITOR AND CONTROL",
+        self.screen.chgat(0, 0, curses.color_pair(5))
+        self.screen.addstr(0, 2, "WIEN FILTER MONITOR AND CONTROL",
                            curses.A_BOLD | curses.color_pair(5))
-        self.screen.chgat(-1, curses.color_pair(5))
+
+    def createGlobalOptions(self):
+        self.screen.chgat(curses.LINES - 1, 0, curses.color_pair(5))
+        self.screen.addstr(curses.LINES - 1, 2, "SET   DISCONNECT   EXIT",
+                           curses.A_BOLD | curses.color_pair(5))
 
     def createStatusWindow(self):
-        self.statusWindow = curses.newwin(curses.LINES - 1, curses.COLS, 1, 0)
-        self.ppsDisplay = self.statusWindow.subwin(9, curses.COLS - 4, 2, 2)
-        self.npsDisplay = self.statusWindow.subwin(9, curses.COLS - 4, 12, 2)
+        self.statusWindow = curses.newwin(curses.LINES - 2, curses.COLS, 1, 0)
+        self.ppsDisplay = self.statusWindow.subwin(10, curses.COLS - 4, 2, 2)
+        self.npsDisplay = self.statusWindow.subwin(10, curses.COLS - 4, 12, 2)
         self.statusWindow.nodelay(True)
 
     def addStatusReadback(self):
@@ -60,6 +66,7 @@ class WFDisplay(object):
         window.addstr(startY + 2, startX + 2, "Voltage (kV):")
         window.addstr(startY + 3, startX + 2, "Current (μA):")
         window.addstr(startY + 5, startX + 2, "Ramp Rate (V/s):")
+        window.addstr(startY + 6, startX + 2, "Status:")
         window.attroff(curses.A_BOLD)
         window.addstr(startY + 2, startX + 19,
                       "{0:10.3f}".format(status["voltage"]))
@@ -67,6 +74,8 @@ class WFDisplay(object):
                       "{0:10.3f}".format(status["current"]))
         window.addstr(startY + 5, startX + 19,
                       "{0:10d}".format(status["rate"]))
+        window.addstr(startY + 6, startX + 19,
+                      "{0:>10s}".format(status["status"]))
         self.createAndAddBar(
             window,
             status["voltage"],
