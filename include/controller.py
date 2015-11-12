@@ -1,16 +1,16 @@
 # controller - provides WFcontroller to process info from user and model
 
 
-from include.display import WFdisplay
-from include.model import WFmodel
+from include.display import WFDisplay
+from include.model import WFModel
 
 
-class WFcontroller(object):
+class WFController(object):
   def __init__(self):
     self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
                    "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
-    self.model = WFmodel()
-    self.display = WFdisplay(self, self.status)
+    self.model = WFModel()
+    self.display = WFDisplay(self, self.status)
 
   def __str__(self):
     return "WF: {}\n    {}".format(self.model, self.display)

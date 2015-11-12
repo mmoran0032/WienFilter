@@ -7,7 +7,7 @@ from time import sleep
 from include.bar import Bar
 
 
-class WFdisplay(object):
+class WFDisplay(object):
   def __init__(self, controller, status):
     self.isUpdating = True
     self.refreshTime = 0.5

@@ -6,7 +6,7 @@ import socket
 from share.config import negativeAddress, positiveAddress
 
 
-class WFmodel(object):
+class WFModel(object):
   def __init__(self, negAddr=negativeAddress, posAddr=positiveAddress):
     self.negativeSocket = self.createAndConnectSocket(negAddr)
     self.positiveSocket = self.createAndConnectSocket(posAddr)
