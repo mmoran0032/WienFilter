@@ -20,8 +20,8 @@ class WFController(object):
     self.display.display()
 
   def querySupplies(self):
-    self.negativeOutput = self.model.communicate(0, ">DON?\n")
-    self.positiveOutput = self.model.communicate(1, ">DON?\n")
+    self.negativeOutput = self.model.communicate(0, ">KS?\n")
+    self.positiveOutput = self.model.communicate(1, ">KS?\n")
     self.negativeV = self.model.communicate(0, ">M0?\n")
     self.negativeA = self.model.communicate(0, ">M1?\n")
     self.positiveV = self.model.communicate(1, ">M0?\n")
