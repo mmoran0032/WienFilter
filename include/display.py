@@ -8,7 +8,7 @@ from include.bar import Bar
 
 
 class WFDisplay(object):
-  def __init__(self, controller, status):
+  def __init__(self, controller):
     self.isUpdating = True
     self.refreshTime = 0.5
     self.controller = controller
@@ -32,25 +32,17 @@ class WFDisplay(object):
     curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_BLUE)
 
   def assembleScreen(self):
-    self.createTitleAndMenu()
+    self.createTitle()
     self.createStatusWindow()
     self.addStatusReadback()
 
-  def createTitleAndMenu(self):
-    self.screen.addstr("  WIEN FILTER MONITOR",
+  def createTitle(self):
+    self.screen.addstr(0, 0, "  WIEN FILTER MONITOR AND CONTROL",
                        curses.A_BOLD | curses.color_pair(5))
     self.screen.chgat(-1, curses.color_pair(5))
-    self.screen.addstr(curses.LINES-1, 0,
-                       "'E' edit values, 'C' close connection, 'Q' shutdown")
-    self.screen.chgat(curses.LINES-1, 1, 1,
-                      curses.A_BOLD | curses.color_pair(3))
-    self.screen.chgat(curses.LINES-1, 18, 1,
-                      curses.A_BOLD | curses.color_pair(3))
-    self.screen.chgat(curses.LINES-1, 40, 1,
-                      curses.A_BOLD | curses.color_pair(2))
 
   def createStatusWindow(self):
-    self.statusWindow = curses.newwin(curses.LINES-2, curses.COLS, 1, 0)
+    self.statusWindow = curses.newwin(curses.LINES-1, curses.COLS, 1, 0)
     self.statusDisplay = self.statusWindow.subwin(curses.LINES-4,
                                                   curses.COLS-2, 2, 1)
     self.statusWindow.nodelay(True)
@@ -72,11 +64,19 @@ class WFDisplay(object):
     self.statusDisplay.addstr(startY+2, startX+17,
                               "{0:10.3f}".format(status["current"]))
     self.statusDisplay.addstr(startY+3, startX+17,
-                              "{0:10.1f}".format(status["rate"]))
-    voltageBar = Bar(35, status["voltage"]/110.0)
-    currentBar = Bar(35, status["current"]/2.0)
-    self.statusDisplay.addstr(startY+1, startX+35, str(voltageBar))
-    self.statusDisplay.addstr(startY+2, startX+35, str(currentBar))
+                              "{0:10d}".format(status["rate"]))
+    self.createAndAddBar(status["voltage"], 110.0, startY+1, startX+35)
+    self.createAndAddBar(status["current"], 2.0, startY+2, startX+35)
+
+  def createAndAddBar(self, value, maximum, y, x):
+    percent = abs(value)/float(maximum) * 100
+    bar = Bar(35, percent)
+    if percent > 75:
+      self.statusDisplay.addstr(y, x, str(bar),
+                                curses.A_BOLD | curses.color_pair(2))
+    else:
+      self.statusDisplay.addstr(y, x, str(bar),
+                                curses.A_BOLD | curses.color_pair(3))
 
   def display(self):
     while self.isUpdating:

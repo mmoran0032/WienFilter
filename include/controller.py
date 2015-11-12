@@ -10,7 +10,7 @@ class WFController(object):
     self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
                    "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
     self.model = WFModel()
-    self.display = WFDisplay(self, self.status)
+    self.display = WFDisplay(self)
 
   def __str__(self):
     return "WF: {}\n    {}".format(self.model, self.display)
