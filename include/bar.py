@@ -30,11 +30,11 @@ class Bar(object):
         return output
 
     @property
-    def size(self, decorated=False):
-        if decorated:
-            return self._size
+    def size(self):
         if self.withText:
             return self._size - 6
+        else:
+            return self._size
 
     @property
     def percent(self):
