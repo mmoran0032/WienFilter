@@ -3,13 +3,15 @@
 
 from include.display import WFDisplay
 from include.model import WFModel
+from share.config import negativeAddress, positiveAddress
 
 
 class WFController(object):
   def __init__(self):
     self.status = {"Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
                    "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}}
-    self.model = WFModel()
+    self.posModel = WFModel(positiveAddress)
+    self.negModel = WFModel(negativeAddress)
     self.display = WFDisplay(self)
 
   def __str__(self):
@@ -20,12 +22,15 @@ class WFController(object):
     self.display.display()
 
   def querySupplies(self):
-    self.negativeOutput = self.model.communicate(0, ">KS?\n")
-    self.positiveOutput = self.model.communicate(1, ">KS?\n")
-    self.negativeV = self.model.communicate(0, ">M0?\n")
-    self.negativeA = self.model.communicate(0, ">M1?\n")
-    self.positiveV = self.model.communicate(1, ">M0?\n")
-    self.positiveA = self.model.communicate(1, ">M1?\n")
+    self.querySingleSupply(self.posModel, "Pos")
+    self.querySingleSupply(self.negModel, "Neg")
+
+  def querySingleSupply(self, supply, name):
+    self.status[name] = {
+      "status": supply.communicate(">KS?\n"),
+      "voltage": supply.communicate(">M0?\n"),
+      "current": supply.communicate(">M1?\n")
+    }
 
   def convertData(self):
     self.status["Neg"]["status"] = self.convertIndicator(self.negativeOutput)

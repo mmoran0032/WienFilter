@@ -5,6 +5,6 @@ TODO
 
   - catch key input properly
 
-- include Bar in output display (for voltage and current)
+  - make things look better
 
 - handle user input for setvalues

@@ -43,44 +43,44 @@ class WFDisplay(object):
 
   def createStatusWindow(self):
     self.statusWindow = curses.newwin(curses.LINES-1, curses.COLS, 1, 0)
-    self.statusDisplay = self.statusWindow.subwin(curses.LINES-4,
-                                                  curses.COLS-2, 2, 1)
+    self.ppsDisplay = self.statusWindow.subwin(9, curses.COLS-4, 2, 2)
+    self.npsDisplay = self.statusWindow.subwin(9, curses.COLS-4, 12, 2)
     self.statusWindow.nodelay(True)
     self.statusWindow.box()
 
   def addStatusReadback(self):
-    self.addSupply("Positive", self.status["Pos"], 4, 3)
-    self.addSupply("Negative", self.status["Neg"], 4, 8)
+    self.addSupply(self.ppsDisplay, "Positive", self.status["Pos"], 1, 1)
+    self.addSupply(self.npsDisplay, "Negative", self.status["Neg"], 1, 1)
 
-  def addSupply(self, supply, status, startX, startY):
-    self.statusDisplay.attron(curses.A_BOLD | curses.color_pair(1))
-    self.statusDisplay.addstr(startY, startX, "{} Power Supply".format(supply))
-    self.statusDisplay.addstr(startY+1, startX, "Voltage (kV):")
-    self.statusDisplay.addstr(startY+2, startX, "Current (μA):")
-    self.statusDisplay.addstr(startY+3, startX, "Ramp Rate (V/s):")
-    self.statusDisplay.attroff(curses.A_BOLD)
-    self.statusDisplay.addstr(startY+1, startX+17,
+  def addSupply(self, window, supply, status, startX, startY):
+    window.attron(curses.A_BOLD | curses.color_pair(1))
+    window.addstr(startY, startX, "{} Power Supply".format(supply))
+    window.addstr(startY+2, startX+2, "Voltage (kV):")
+    window.addstr(startY+3, startX+2, "Current (μA):")
+    window.addstr(startY+5, startX+2, "Ramp Rate (V/s):")
+    window.attroff(curses.A_BOLD)
+    window.addstr(startY+2, startX+19,
                               "{0:10.3f}".format(status["voltage"]))
-    self.statusDisplay.addstr(startY+2, startX+17,
+    window.addstr(startY+3, startX+19,
                               "{0:10.3f}".format(status["current"]))
-    self.statusDisplay.addstr(startY+3, startX+17,
+    window.addstr(startY+5, startX+19,
                               "{0:10d}".format(status["rate"]))
-    self.createAndAddBar(status["voltage"], 110.0, startY+1, startX+35)
-    self.createAndAddBar(status["current"], 2.0, startY+2, startX+35)
+    self.createAndAddBar(window, status["voltage"], 110.0, startY+2, startX+37)
+    self.createAndAddBar(window, status["current"], 2.0, startY+3, startX+37)
+    window.box()
 
-  def createAndAddBar(self, value, maximum, y, x):
+  def createAndAddBar(self, window, value, maximum, y, x):
     percent = abs(value)/float(maximum) * 100
-    bar = Bar(35, percent)
+    bar = Bar(33, percent)
     if percent > 75:
-      self.statusDisplay.addstr(y, x, str(bar),
-                                curses.A_BOLD | curses.color_pair(2))
+      window.addstr(y, x, str(bar), curses.A_BOLD | curses.color_pair(2))
     else:
-      self.statusDisplay.addstr(y, x, str(bar),
-                                curses.A_BOLD | curses.color_pair(3))
+      window.addstr(y, x, str(bar), curses.A_BOLD | curses.color_pair(3))
 
   def display(self):
     while self.isUpdating:
-      self.statusDisplay.clear()
+      self.ppsDisplay.clear()
+      self.npsDisplay.clear()
       self.status = self.controller.getCurrentStatus()
       self.addStatusReadback()
       self.refreshDisplay()
@@ -96,7 +96,8 @@ class WFDisplay(object):
   def refreshDisplay(self):
     self.screen.noutrefresh()
     self.statusWindow.noutrefresh()
-    self.statusDisplay.noutrefresh()
+    self.ppsDisplay.noutrefresh()
+    self.npsDisplay.noutrefresh()
     curses.doupdate()
 
   def end(self):
