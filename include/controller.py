@@ -20,6 +20,7 @@ class WFController(object):
         self.posModel = WFModel(positiveAddress)
         self.negModel = WFModel(negativeAddress)
         self.display = WFDisplay(self)
+        self.selection = None
 
     def __str__(self):
         return "WF: {} {}\n    {}".format(self.posModel, self.negModel,
