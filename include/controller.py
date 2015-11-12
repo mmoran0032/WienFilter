@@ -18,7 +18,8 @@ class WFController(object):
         self.display = WFDisplay(self)
 
     def __str__(self):
-        return "WF: {}\n    {}".format(self.model, self.display)
+        return "WF: {} {}\n    {}".format(self.posModel, self.negModel,
+                                          self.display)
 
     def run(self):
         try:
@@ -40,10 +41,11 @@ class WFController(object):
         }
 
     def convertAllData(self):
-        self._status["Pos"] = convertData(self._status["Pos"])
-        self._status["Neg"] = convertData(self._status["Neg"])
+        self._status["Pos"] = self.convertData(self._status["Pos"])
+        self._status["Neg"] = self.convertData(self._status["Neg"])
 
     def convertData(self, subStatus):
+        newStatus = {}
         newStatus["status"] = self.convertIndicator(subStatus["status"])
         newStatus["voltage"] = self.convertNumber(subStatus["voltage"], -3)
         newStatus["current"] = self.convertNumber(subStatus["current"], 6)
