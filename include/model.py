@@ -7,6 +7,7 @@ import socket
 class WFModel(object):
 
     def __init__(self, address):
+        self.address = address
         self.socket = self.createAndConnectSocket(address)
         self.previous = "No previous message"
         self.connected = False
@@ -14,7 +15,7 @@ class WFModel(object):
     def __str__(self):
         return "WF-Model: {}".format(self.socket.getsockname())
 
-    def createAndConnectSocket(self, address):
+    def createAndConnectSocket(self, address=self.address):
         try:
             s = socket.create_connection(address, timeout=5)
             self.connected = True
