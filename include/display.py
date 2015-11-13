@@ -4,7 +4,8 @@
 import curses
 from time import sleep
 
-from include.bar import Bar
+from include.helpers.bar import Bar
+# from include.helpers.powerStatus import PSStatus
 
 
 class WFDisplay(object):
