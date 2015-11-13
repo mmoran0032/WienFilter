@@ -10,7 +10,7 @@ class DummyController(object):
         self.status = {
             "Pos": {
                 "status": "0110001",
-                "voltage": 88.776,
+                "voltage": 84.234,
                 "current": 0.824,
                 "rate": 250
             },

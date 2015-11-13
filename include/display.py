@@ -4,8 +4,8 @@
 import curses
 from time import sleep
 
-from include.helpers.bar import Bar
 # from include.helpers.powerStatus import PSStatus
+from include.helpers.readback import Readback
 
 
 class WFDisplay(object):
@@ -63,38 +63,29 @@ class WFDisplay(object):
 
     def addSupply(self, window, supply, status, startX, startY):
         window.box()
-        window.attron(curses.A_BOLD | curses.color_pair(1))
-        window.addstr(startY - 1, startX, " {} Power Supply ".format(supply))
-        window.addstr(startY + 1, startX + 1, "Voltage (kV):")
-        window.addstr(startY + 2, startX + 1, "Current (μA):")
-        window.addstr(startY + 4, startX + 1, "Ramp Rate:")
+        window.addstr(startY - 1, startX, " {} Power Supply ".format(supply),
+                      curses.A_BOLD | curses.color_pair(4))
+
+        self.voltageReadback = Readback("Voltage (kV):", 71)
+        self.voltageReadback.updateValues(status["voltage"],
+                                          status["voltage"], 110.0)
+        self.voltageReadback.showBar = True
+        window.addstr(startY + 1, startX + 1,
+                      self.voltageReadback.buildDisplay())
+        self.currentReadback = Readback("Current (μA):", 71)
+        self.currentReadback.updateValues(status["current"],
+                                          status["current"], 2.0)
+        self.voltageReadback.showBar = True
+        window.addstr(startY + 2, startX + 1,
+                      self.currentReadback.buildDisplay())
+        self.rampReadback = Readback("Ramp Rate:", 71)
+        self.rampReadback.updateValues(status["rate"], status["rate"])
+        self.rampReadback.showDecimal = False
+        window.addstr(startY + 4, startX + 1,
+                      self.rampReadback.buildDisplay())
         window.addstr(startY + 6, startX + 1, "Status:")
-        window.attroff(curses.A_BOLD)
-        window.addstr(startY + 1, startX + 18,
-                      "{0:8.3f}".format(status["voltage"]))
-        window.addstr(startY + 1, startX + 30,
-                      "{0:8.3f}".format(status["voltage"]))
-        window.addstr(startY + 2, startX + 18,
-                      "{0:8.3f}".format(status["current"]))
-        window.addstr(startY + 2, startX + 30,
-                      "{0:8.3f}".format(status["current"]))
-        window.addstr(startY + 4, startX + 18,
-                      "{0:8d}".format(status["rate"]))
-        window.addstr(startY + 4, startX + 30,
-                      "{0:8d}".format(status["rate"]), curses.A_BOLD)
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]))
-        self.addBar(window, status["voltage"], 110.0, startY + 1, startX + 42)
-        self.addBar(window, status["current"], 2.0, startY + 2, startX + 42)
-
-    def addBar(self, window, value, maximum, y, x):
-        percent = abs(value) / float(maximum) * 100
-        bar = Bar(30, percent)
-        window.addstr(y, x, str(bar))
-        if percent > 75:
-            window.chgat(y, x - 12, 43, curses.A_BOLD | curses.color_pair(2))
-        else:
-            window.chgat(y, x - 12, 43, curses.A_BOLD | curses.color_pair(3))
 
     def display(self):
         while self.isUpdating:
