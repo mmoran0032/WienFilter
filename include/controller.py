@@ -10,8 +10,18 @@ class WFController(object):
 
     def __init__(self):
         self._status = {
-            "Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
-            "Neg": {"status": 0, "voltage": 0, "current": 0, "rate": 0}
+            "Pos": {
+                "status": 0,
+                "voltage": {"value": 0, "setpoint": 0},
+                "current": {"value": 0, "setpoint": 0},
+                "rate": {"value": 0, "setpoint": 0}
+            },
+            "Neg": {
+                "status": 0,
+                "voltage": {"value": 0, "setpoint": 0},
+                "current": {"value": 0, "setpoint": 0},
+                "rate": {"value": 0, "setpoint": 0}
+            }
         }
         self.setpoints = {
             "Pos": {"status": 0, "voltage": 0, "current": 0, "rate": 0},
@@ -54,8 +64,10 @@ class WFController(object):
     def convertData(self, subStatus):
         newStatus = {}
         newStatus["status"] = self.convertIndicator(subStatus["status"])
-        newStatus["voltage"] = self.convertNumber(subStatus["voltage"], -3)
-        newStatus["current"] = self.convertNumber(subStatus["current"], 6)
+        newStatus["voltage"]["value"] = self.convertNumber(
+            subStatus["voltage"], -3)
+        newStatus["current"]["value"] = self.convertNumber(
+            subStatus["current"], 6)
         return newStatus
 
     def convertIndicator(self, indicator):
