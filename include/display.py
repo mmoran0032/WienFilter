@@ -14,9 +14,6 @@ class WFDisplay(object):
         self.refreshTime = 0.5
         self.controller = controller
 
-    def __str__(self):
-        return "WFDisplay, using curses {}".format(curses.version.decode())
-
     def initialize(self):
         self.initializeCurses()
         self.status = self.controller.status

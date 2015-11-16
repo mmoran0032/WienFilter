@@ -22,10 +22,6 @@ class WFController(object):
         self.display = WFDisplay(self)
         self.selection = None
 
-    def __str__(self):
-        return "WFController: {} {}\n    {}".format(
-            self.posModel, self.negModel, self.display)
-
     def run(self):
         try:
             self.display.initialize()
