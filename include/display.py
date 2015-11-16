@@ -81,7 +81,7 @@ class WFDisplay(object):
         window.addstr(startY + 4, startX + 30,
                       "{0:8d}".format(status["rate"]["value"]), curses.A_BOLD)
         window.addstr(startY + 6, startX + 18,
-                      "{0:>8s}".format(status["status"]))
+                      "{0:>8s}".format(status["status"]), curses.A_BOLD)
         self.addBar(window, status["voltage"]["value"],
                     status["voltage"]["limit"], startY + 1, startX + 42)
         self.addBar(window, status["current"]["value"],
