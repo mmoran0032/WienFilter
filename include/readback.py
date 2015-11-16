@@ -24,7 +24,7 @@ class Readback(object):
         if barsize < 0:
             self.showBar = False
         if self.showBar and self.limit is not None:
-            percent = abs(self.value) / self.limit * 100
+            percent = abs(self.value / self.limit * 100)
             bar = Bar(barsize, percent)
             display = "{}{}".format(display, str(bar))
         return display

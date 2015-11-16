@@ -5,6 +5,7 @@ import curses
 from time import sleep
 
 from include.bar import Bar
+from include.readback import Readback
 
 
 class WFDisplay(object):
@@ -84,6 +85,12 @@ class WFDisplay(object):
                       "{0:8.3f}".format(status["voltage"]["value"]))
         self.addBar(window, status["voltage"]["value"],
                     status["voltage"]["limit"], startY + 1, startX + 42)
+
+        voltage = Readback("Voltage (kV):", 71)
+        voltage.updateValues(status["voltage"]["value"],
+                             status["voltage"]["setpoint"],
+                             status["voltage"]["limit"])
+        window.addstr(startY + 1, startX + 1, str(voltage))
 
         window.addstr(startY + 2, startX + 18,
                       "{0:8.3f}".format(status["current"]["setpoint"]))
