@@ -94,6 +94,13 @@ class WFDisplay(object):
                              status["current"]["setpoint"],
                              status["current"]["limit"])
         window.addstr(startY + 2, startX + 1, str(current))
+        window.chgat(startY + 2, startX + 1, 13, curses.A_BOLD)
+        if current.percent > 75:
+            window.chgat(startY + 2, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(2))
+        else:
+            window.chgat(startY + 2, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(3))
 
         ramp = Readback("Ramp Rate:", 71, showBar=False, numberFormat="8d")
         ramp.updateValues(status["rate"]["value"],
