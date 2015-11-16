@@ -111,7 +111,7 @@ class WFDisplay(object):
         self.ppsDisplay.noutrefresh()
         self.npsDisplay.noutrefresh()
         curses.doupdate()
-        
+
     def handleKeypress(self, key):
         if key in (ord("q"), ord("Q")):
             self.end()
