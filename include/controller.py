@@ -9,20 +9,21 @@ from share.config import negativeAddress, positiveAddress
 class WFController(object):
 
     def __init__(self):
-        self._status = {
-            "Positive": {
-                "status": 0,
-                "voltage": {"value": 0, "setpoint": 0, "limit": 0},
-                "current": {"value": 0, "setpoint": 0, "limit": 0},
-                "rate": 0
-            },
-            "Negative": {
-                "status": 0,
-                "voltage": {"value": 0, "setpoint": 0, "limit": 0},
-                "current": {"value": 0, "setpoint": 0, "limit": 0},
-                "rate": 0
-            }
-        }
+        # self._status = {
+        #     "Positive": {
+        #         "status": 0,
+        #         "voltage": {"value": 0, "setpoint": 0, "limit": 0},
+        #         "current": {"value": 0, "setpoint": 0, "limit": 0},
+        #         "rate": 0
+        #     },
+        #     "Negative": {
+        #         "status": 0,
+        #         "voltage": {"value": 0, "setpoint": 0, "limit": 0},
+        #         "current": {"value": 0, "setpoint": 0, "limit": 0},
+        #         "rate": 0
+        #     }
+        # }
+        self._status = dict()
         self.posModel = WFModel(positiveAddress)
         self.negModel = WFModel(negativeAddress)
         self.display = WFDisplay(self)
@@ -35,6 +36,12 @@ class WFController(object):
         except:
             self.display.end()
             raise
+
+    @property
+    def status(self):
+        self.querySupplies()
+        self.convertAllData()
+        return self._status
 
     def querySupplies(self):
         if self.posModel.connected:
@@ -70,9 +77,3 @@ class WFController(object):
         num = float(number.split(":")[1])
         num *= 10 ** power
         return num
-
-    @property
-    def status(self):
-        self.querySupplies()
-        self.convertAllData()
-        return self._status
