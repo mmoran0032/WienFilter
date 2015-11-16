@@ -54,12 +54,10 @@ class WFDisplay(object):
         self.statusWindow.nodelay(True)
 
     def addStatusReadback(self):
-        self.addSupply(self.ppsDisplay, "Positive", self.status["Positive"],
-                       1, 1)
-        self.addSupply(self.npsDisplay, "Negative", self.status["Negative"],
-                       1, 1)
+        self.addSupply(self.ppsDisplay, "Positive", self.status["Positive"])
+        self.addSupply(self.npsDisplay, "Negative", self.status["Negative"])
 
-    def addSupply(self, window, supply, status, startX, startY):
+    def addSupply(self, window, supply, status, startX=1, startY=1):
         window.box()
         window.attron(curses.A_BOLD | curses.color_pair(1))
         window.addstr(startY - 1, startX, " {} Power Supply ".format(supply))
