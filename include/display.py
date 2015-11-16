@@ -72,15 +72,19 @@ class WFDisplay(object):
         window.box()
         window.attron(curses.A_BOLD | curses.color_pair(1))
         window.addstr(startY - 1, startX, " {} Power Supply ".format(supply))
-        window.addstr(startY + 1, startX + 1, "Voltage (kV):")
         window.addstr(startY + 2, startX + 1, "Current (μA):")
         window.addstr(startY + 4, startX + 1, "Ramp Rate:")
         window.addstr(startY + 6, startX + 1, "Status:")
         window.attroff(curses.A_BOLD)
+
+        window.addstr(startY + 1, startX + 1, "Voltage (kV):", curses.A_BOLD)
         window.addstr(startY + 1, startX + 18,
                       "{0:8.3f}".format(status["voltage"]["setpoint"]))
         window.addstr(startY + 1, startX + 30,
                       "{0:8.3f}".format(status["voltage"]["value"]))
+        self.addBar(window, status["voltage"]["value"],
+                    status["voltage"]["limit"], startY + 1, startX + 42)
+
         window.addstr(startY + 2, startX + 18,
                       "{0:8.3f}".format(status["current"]["setpoint"]))
         window.addstr(startY + 2, startX + 30,
@@ -91,8 +95,6 @@ class WFDisplay(object):
                       "{0:8d}".format(status["rate"]["value"]), curses.A_BOLD)
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]), curses.A_BOLD)
-        self.addBar(window, status["voltage"]["value"],
-                    status["voltage"]["limit"], startY + 1, startX + 42)
         self.addBar(window, status["current"]["value"],
                     status["current"]["limit"], startY + 2, startX + 42)
 
