@@ -10,13 +10,17 @@ class DummyController(object):
         self.status = {
             "Positive": {
                 "status": "0110001",
-                "voltage": {"value": 88.776, "setpoint": 88.78},
+                "voltage": {
+                    "value": 88.776, "setpoint": 88.78, "limit": 110
+                },
                 "current": 0.824,
                 "rate": 250
             },
             "Negative": {
                 "status": "0110001",
-                "voltage": {"value": -28.773, "setpoint": -28.74},
+                "voltage": {
+                    "value": -28.773, "setpoint": -28.74, "limit": -110
+                },
                 "current": 0.512,
                 "rate": 250
             }

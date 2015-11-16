@@ -12,13 +12,13 @@ class WFController(object):
         self._status = {
             "Positive": {
                 "status": 0,
-                "voltage": {"value": 0, "setpoint": 0},
+                "voltage": {"value": 0, "setpoint": 0, "limit": 0},
                 "current": 0,
                 "rate": 0
             },
             "Negative": {
                 "status": 0,
-                "voltage": {"value": 0, "setpoint": 0},
+                "voltage": {"value": 0, "setpoint": 0, "limit": 0},
                 "current": 0,
                 "rate": 0
             }
