@@ -54,8 +54,8 @@ class WFDisplay(object):
         self.statusWindow.nodelay(True)
 
     def addStatusReadback(self):
-        self.addSupply(self.ppsDisplay, "Positive", self.status["Pos"], 1, 1)
-        self.addSupply(self.npsDisplay, "Negative", self.status["Neg"], 1, 1)
+        self.addSupply(self.ppsDisplay, "Positive", self.status["Positive"], 1, 1)
+        self.addSupply(self.npsDisplay, "Negative", self.status["Negative"], 1, 1)
 
     def addSupply(self, window, supply, status, startX, startY):
         window.box()
@@ -67,9 +67,9 @@ class WFDisplay(object):
         window.addstr(startY + 6, startX + 1, "Status:")
         window.attroff(curses.A_BOLD)
         window.addstr(startY + 1, startX + 18,
-                      "{0:8.3f}".format(status["voltage"]))
+                      "{0:8.3f}".format(status["voltage"]["setpoint"]))
         window.addstr(startY + 1, startX + 30,
-                      "{0:8.3f}".format(status["voltage"]))
+                      "{0:8.3f}".format(status["voltage"]["value"]))
         window.addstr(startY + 2, startX + 18,
                       "{0:8.3f}".format(status["current"]))
         window.addstr(startY + 2, startX + 30,
@@ -80,7 +80,8 @@ class WFDisplay(object):
                       "{0:8d}".format(status["rate"]), curses.A_BOLD)
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]))
-        self.addBar(window, status["voltage"], 110.0, startY + 1, startX + 42)
+        self.addBar(window, status["voltage"]["value"], 110.0, startY + 1,
+            startX + 42)
         self.addBar(window, status["current"], 2.0, startY + 2, startX + 42)
 
     def addBar(self, window, value, maximum, y, x):

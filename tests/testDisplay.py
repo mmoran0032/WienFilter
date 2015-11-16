@@ -8,15 +8,15 @@ class DummyController(object):
 
     def __init__(self):
         self.status = {
-            "Pos": {
+            "Positive": {
                 "status": "0110001",
-                "voltage": 88.776,
+                "voltage": {"value": 88.776, "setpoint": 88.78},
                 "current": 0.824,
                 "rate": 250
             },
-            "Neg": {
+            "Negative": {
                 "status": "0110001",
-                "voltage": -28.773,
+                "voltage": {"value": -28.773, "setpoint": -28.74},
                 "current": 0.512,
                 "rate": 250
             }
