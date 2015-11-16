@@ -16,7 +16,9 @@ class DummyController(object):
                 "current": {
                     "value": 0.824, "setpoint": 1.0, "limit": 2.0
                 },
-                "rate": 250
+                "rate": {
+                    "value": 250, "setpoint": 250
+                }
             },
             "Negative": {
                 "status": "0110001",
@@ -24,9 +26,11 @@ class DummyController(object):
                     "value": -28.773, "setpoint": -28.74, "limit": -110
                 },
                 "current": {
-                    "value": 0.512, "setpoint": 1, "limit": 2.0
+                    "value": 0.512, "setpoint": 1.0, "limit": 2.0
                 },
-                "rate": 250
+                "rate": {
+                    "value": 250, "setpoint": 250
+                }
             }
         }
 

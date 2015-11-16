@@ -23,12 +23,6 @@ class WFController(object):
                 "rate": 0
             }
         }
-        self.setpoints = {
-            "Positive":
-                {"status": 0, "voltage": 0, "current": 0, "rate": 0},
-            "Negative":
-                {"status": 0, "voltage": 0, "current": 0, "rate": 0}
-        }
         self.posModel = WFModel(positiveAddress)
         self.negModel = WFModel(negativeAddress)
         self.display = WFDisplay(self)
