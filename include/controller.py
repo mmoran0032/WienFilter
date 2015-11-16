@@ -13,13 +13,13 @@ class WFController(object):
             "Positive": {
                 "status": 0,
                 "voltage": {"value": 0, "setpoint": 0, "limit": 0},
-                "current": 0,
+                "current": {"value": 0, "setpoint": 0, "limit": 0},
                 "rate": 0
             },
             "Negative": {
                 "status": 0,
                 "voltage": {"value": 0, "setpoint": 0, "limit": 0},
-                "current": 0,
+                "current": {"value": 0, "setpoint": 0, "limit": 0},
                 "rate": 0
             }
         }
@@ -51,7 +51,7 @@ class WFController(object):
     def querySingleSupply(self, supply, name):
         self._status[name]["status"] = supply.communicate(">KS?\n")
         self._status[name]["voltage"]["value"] = supply.communicate(">M0?\n")
-        self._status[name]["current"] = supply.communicate(">M1?\n")
+        self._status[name]["current"]["value"] = supply.communicate(">M1?\n")
 
     def convertAllData(self):
         self._status["Positive"] = self.convertData(self._status["Positive"])
@@ -62,7 +62,8 @@ class WFController(object):
         newStatus["status"] = self.convertIndicator(subStatus["status"])
         newStatus["voltage"]["value"] = self.convertNumber(
             subStatus["voltage"]["value"], -3)
-        newStatus["current"] = self.convertNumber(subStatus["current"], 6)
+        newStatus["current"]["value"] = self.convertNumber(
+            subStatus["current"]["value"], 6)
         return newStatus
 
     def convertIndicator(self, indicator):

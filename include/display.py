@@ -73,9 +73,9 @@ class WFDisplay(object):
         window.addstr(startY + 1, startX + 30,
                       "{0:8.3f}".format(status["voltage"]["value"]))
         window.addstr(startY + 2, startX + 18,
-                      "{0:8.3f}".format(status["current"]))
+                      "{0:8.3f}".format(status["current"]["setpoint"]))
         window.addstr(startY + 2, startX + 30,
-                      "{0:8.3f}".format(status["current"]))
+                      "{0:8.3f}".format(status["current"]["value"]))
         window.addstr(startY + 4, startX + 18,
                       "{0:8d}".format(status["rate"]))
         window.addstr(startY + 4, startX + 30,
@@ -83,9 +83,9 @@ class WFDisplay(object):
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]))
         self.addBar(window, status["voltage"]["value"],
-                    status["voltage"]["limit"], startY + 1,
-                    startX + 42)
-        self.addBar(window, status["current"], 2.0, startY + 2, startX + 42)
+                    status["voltage"]["limit"], startY + 1, startX + 42)
+        self.addBar(window, status["current"]["value"],
+                    status["current"]["limit"], startY + 2, startX + 42)
 
     def addBar(self, window, value, maximum, y, x):
         percent = abs(value / float(maximum) * 100)
