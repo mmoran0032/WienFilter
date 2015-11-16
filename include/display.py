@@ -81,6 +81,13 @@ class WFDisplay(object):
                              status["voltage"]["setpoint"],
                              status["voltage"]["limit"])
         window.addstr(startY + 1, startX + 1, str(voltage))
+        window.chgat(startY + 1, startX + 1, 13, curses.A_BOLD)
+        if voltage.percent > 75:
+            window.chgat(startY + 1, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(2))
+        else:
+            window.chgat(startY + 1, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(3))
 
         current = Readback("Current (μA):", 71)
         current.updateValues(status["current"]["value"],
