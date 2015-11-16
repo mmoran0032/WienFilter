@@ -35,7 +35,6 @@ class WFDisplay(object):
         self.createTitle()
         self.createGlobalOptions()
         self.createStatusWindow()
-        self.addStatusReadback()
 
     def createTitle(self):
         self.screen.chgat(0, 0, curses.color_pair(5))
@@ -52,6 +51,18 @@ class WFDisplay(object):
         self.ppsDisplay = self.statusWindow.subwin(10, curses.COLS - 4, 2, 2)
         self.npsDisplay = self.statusWindow.subwin(10, curses.COLS - 4, 12, 2)
         self.statusWindow.nodelay(True)
+
+    def display(self):
+        while self.isUpdating:
+            self.ppsDisplay.clear()
+            self.npsDisplay.clear()
+            self.status = self.controller.status
+            self.addStatusReadback()
+            self.refreshDisplay()
+            key = self.statusWindow.getch()
+            if key != -1:
+                self.handleKeypress(key)
+            sleep(self.refreshTime)
 
     def addStatusReadback(self):
         self.addSupply(self.ppsDisplay, "Positive", self.status["Positive"])
@@ -94,28 +105,16 @@ class WFDisplay(object):
         else:
             window.chgat(y, x - 12, 43, curses.A_BOLD | curses.color_pair(3))
 
-    def display(self):
-        while self.isUpdating:
-            self.ppsDisplay.clear()
-            self.npsDisplay.clear()
-            self.status = self.controller.status
-            self.addStatusReadback()
-            self.refreshDisplay()
-            key = self.statusWindow.getch()
-            if key != -1:
-                self.handleKeypress(key)
-            sleep(self.refreshTime)
-
-    def handleKeypress(self, key):
-        if key in (ord("q"), ord("Q")):
-            self.end()
-
     def refreshDisplay(self):
         self.screen.noutrefresh()
         self.statusWindow.noutrefresh()
         self.ppsDisplay.noutrefresh()
         self.npsDisplay.noutrefresh()
         curses.doupdate()
+        
+    def handleKeypress(self, key):
+        if key in (ord("q"), ord("Q")):
+            self.end()
 
     def end(self):
         curses.nocbreak()
