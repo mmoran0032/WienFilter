@@ -4,7 +4,6 @@
 import curses
 from time import sleep
 
-from include.bar import Bar
 from include.readback import Readback
 
 
@@ -111,15 +110,6 @@ class WFDisplay(object):
 
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]), curses.A_BOLD)
-
-    def addBar(self, window, value, maximum, y, x):
-        percent = abs(value / float(maximum) * 100)
-        bar = Bar(30, percent)
-        window.addstr(y, x, str(bar))
-        if percent > 75:
-            window.chgat(y, x - 12, 43, curses.A_BOLD | curses.color_pair(2))
-        else:
-            window.chgat(y, x - 12, 43, curses.A_BOLD | curses.color_pair(3))
 
     def refreshDisplay(self):
         self.screen.noutrefresh()
