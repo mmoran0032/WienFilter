@@ -68,38 +68,17 @@ class WFDisplay(object):
         self.addSupply(self.ppsDisplay, "Positive", self.status["Positive"])
         self.addSupply(self.npsDisplay, "Negative", self.status["Negative"])
 
-    def addSupply(self, window, supply, status, startX=1, startY=1):
+    def addSupply(self, window, supply, status, startY=1, startX=1):
         window.box()
         window.attron(curses.A_BOLD | curses.color_pair(1))
         window.addstr(startY - 1, startX, " {} Power Supply ".format(supply))
         window.addstr(startY + 6, startX + 1, "Status:")
         window.attroff(curses.A_BOLD)
 
-        voltage = Readback("Voltage (kV):", 71)
-        voltage.updateValues(status["voltage"]["value"],
-                             status["voltage"]["setpoint"],
-                             status["voltage"]["limit"])
-        window.addstr(startY + 1, startX + 1, str(voltage))
-        window.chgat(startY + 1, startX + 1, 13, curses.A_BOLD)
-        if voltage.percent > 75:
-            window.chgat(startY + 1, startX + 30, 44,
-                         curses.A_BOLD | curses.color_pair(2))
-        else:
-            window.chgat(startY + 1, startX + 30, 44,
-                         curses.A_BOLD | curses.color_pair(3))
-
-        current = Readback("Current (μA):", 71)
-        current.updateValues(status["current"]["value"],
-                             status["current"]["setpoint"],
-                             status["current"]["limit"])
-        window.addstr(startY + 2, startX + 1, str(current))
-        window.chgat(startY + 2, startX + 1, 13, curses.A_BOLD)
-        if current.percent > 75:
-            window.chgat(startY + 2, startX + 30, 44,
-                         curses.A_BOLD | curses.color_pair(2))
-        else:
-            window.chgat(startY + 2, startX + 30, 44,
-                         curses.A_BOLD | curses.color_pair(3))
+        self.addReadbackWithBar(window, "Voltage (kV):", status["voltage"],
+                                startY + 1, startX + 1)
+        self.addReadbackWithBar(window, "Current (μA):", status["current"],
+                                startY + 2, startX + 1)
 
         ramp = Readback("Ramp Rate:", 71, showBar=False, numberFormat="8d")
         ramp.updateValues(status["rate"]["value"],
@@ -110,6 +89,16 @@ class WFDisplay(object):
 
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]), curses.A_BOLD)
+
+    def addReadbackWithBar(self, window, name, status, y, x):
+        info = Readback(name, 71)
+        info.updateValues(status["value"], status["setpoint"], status["limit"])
+        window.addstr(y, x, str(info))
+        window.chgat(y, x, 13, curses.A_BOLD)
+        if info.percent > 75:
+            window.chgat(y, x + 29, 44, curses.A_BOLD | curses.color_pair(2))
+        else:
+            window.chgat(y, x + 29, 44, curses.A_BOLD | curses.color_pair(3))
 
     def refreshDisplay(self):
         self.screen.noutrefresh()
