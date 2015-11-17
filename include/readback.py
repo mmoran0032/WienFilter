@@ -17,10 +17,8 @@ class Readback(object):
         self.numberFormat = numberFormat
 
     def __str__(self):
-        display = "{0:<13s}    {1:{nf}}".format(self.name, self.setpoint,
-                                                nf=self.numberFormat)
-        display = "{0}    {1:{nf}}    ".format(display, self.value,
-                                               nf=self.numberFormat)
+        display = "{0:<13s}    {1:{nf}}    {2:{nf}}    ".format(
+            self.name, self.setpoint, self.value, nf=self.numberFormat)
         display = self.buildBar(self.size - len(display), display)
         return display
 
