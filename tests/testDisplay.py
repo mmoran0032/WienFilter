@@ -8,17 +8,29 @@ class DummyController(object):
 
     def __init__(self):
         self.status = {
-            "Pos": {
+            "Positive": {
                 "status": "0110001",
-                "voltage": 84.234,
-                "current": 0.824,
-                "rate": 250
+                "voltage": {
+                    "value": 88.776, "setpoint": 88.78, "limit": 110
+                },
+                "current": {
+                    "value": 0.824, "setpoint": 1.0, "limit": 2.0
+                },
+                "rate": {
+                    "value": 250, "setpoint": 250
+                }
             },
-            "Neg": {
+            "Negative": {
                 "status": "0110001",
-                "voltage": -28.773,
-                "current": 0.512,
-                "rate": 250
+                "voltage": {
+                    "value": -28.773, "setpoint": -28.74, "limit": -110
+                },
+                "current": {
+                    "value": 0.512, "setpoint": 1.0, "limit": 2.0
+                },
+                "rate": {
+                    "value": 250, "setpoint": 250
+                }
             }
         }
 

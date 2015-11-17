@@ -12,9 +12,6 @@ class WFModel(object):
         self.previous = "No previous message"
         self.connected = False
 
-    def __str__(self):
-        return "WFModel: {}".format(self.socket.getsockname())
-
     def createAndConnectSocket(self, address=None):
         if address is None:
             address = self.address

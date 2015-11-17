@@ -4,8 +4,7 @@
 import curses
 from time import sleep
 
-# from include.helpers.powerStatus import PSStatus
-from include.helpers.readback import Readback
+from include.readback import Readback
 
 
 class WFDisplay(object):
@@ -14,9 +13,6 @@ class WFDisplay(object):
         self.isUpdating = True
         self.refreshTime = 0.5
         self.controller = controller
-
-    def __str__(self):
-        return "WFDisplay, using curses {}".format(curses.version.decode())
 
     def initialize(self):
         self.initializeCurses()
@@ -39,7 +35,6 @@ class WFDisplay(object):
         self.createTitle()
         self.createGlobalOptions()
         self.createStatusWindow()
-        self.addStatusReadback()
 
     def createTitle(self):
         self.screen.chgat(0, 0, curses.color_pair(5))
@@ -57,36 +52,6 @@ class WFDisplay(object):
         self.npsDisplay = self.statusWindow.subwin(10, curses.COLS - 4, 12, 2)
         self.statusWindow.nodelay(True)
 
-    def addStatusReadback(self):
-        self.addSupply(self.ppsDisplay, "Positive", self.status["Pos"], 1, 1)
-        self.addSupply(self.npsDisplay, "Negative", self.status["Neg"], 1, 1)
-
-    def addSupply(self, window, supply, status, startX, startY):
-        window.box()
-        window.addstr(startY - 1, startX, " {} Power Supply ".format(supply),
-                      curses.A_BOLD | curses.color_pair(4))
-
-        self.voltageReadback = Readback("Voltage (kV):", 71)
-        self.voltageReadback.updateValues(status["voltage"],
-                                          status["voltage"], 110.0)
-        self.voltageReadback.showBar = True
-        window.addstr(startY + 1, startX + 1,
-                      self.voltageReadback.buildDisplay())
-        self.currentReadback = Readback("Current (μA):", 71)
-        self.currentReadback.updateValues(status["current"],
-                                          status["current"], 2.0)
-        self.voltageReadback.showBar = True
-        window.addstr(startY + 2, startX + 1,
-                      self.currentReadback.buildDisplay())
-        self.rampReadback = Readback("Ramp Rate:", 71)
-        self.rampReadback.updateValues(status["rate"], status["rate"])
-        self.rampReadback.showDecimal = False
-        window.addstr(startY + 4, startX + 1,
-                      self.rampReadback.buildDisplay())
-        window.addstr(startY + 6, startX + 1, "Status:")
-        window.addstr(startY + 6, startX + 18,
-                      "{0:>8s}".format(status["status"]))
-
     def display(self):
         while self.isUpdating:
             self.ppsDisplay.clear()
@@ -99,9 +64,52 @@ class WFDisplay(object):
                 self.handleKeypress(key)
             sleep(self.refreshTime)
 
-    def handleKeypress(self, key):
-        if key in (ord("q"), ord("Q")):
-            self.end()
+    def addStatusReadback(self):
+        self.addSupply(self.ppsDisplay, "Positive", self.status["Positive"])
+        self.addSupply(self.npsDisplay, "Negative", self.status["Negative"])
+
+    def addSupply(self, window, supply, status, startX=1, startY=1):
+        window.box()
+        window.attron(curses.A_BOLD | curses.color_pair(1))
+        window.addstr(startY - 1, startX, " {} Power Supply ".format(supply))
+        window.addstr(startY + 6, startX + 1, "Status:")
+        window.attroff(curses.A_BOLD)
+
+        voltage = Readback("Voltage (kV):", 71)
+        voltage.updateValues(status["voltage"]["value"],
+                             status["voltage"]["setpoint"],
+                             status["voltage"]["limit"])
+        window.addstr(startY + 1, startX + 1, str(voltage))
+        window.chgat(startY + 1, startX + 1, 13, curses.A_BOLD)
+        if voltage.percent > 75:
+            window.chgat(startY + 1, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(2))
+        else:
+            window.chgat(startY + 1, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(3))
+
+        current = Readback("Current (μA):", 71)
+        current.updateValues(status["current"]["value"],
+                             status["current"]["setpoint"],
+                             status["current"]["limit"])
+        window.addstr(startY + 2, startX + 1, str(current))
+        window.chgat(startY + 2, startX + 1, 13, curses.A_BOLD)
+        if current.percent > 75:
+            window.chgat(startY + 2, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(2))
+        else:
+            window.chgat(startY + 2, startX + 30, 44,
+                         curses.A_BOLD | curses.color_pair(3))
+
+        ramp = Readback("Ramp Rate:", 71, showBar=False, numberFormat="8d")
+        ramp.updateValues(status["rate"]["value"],
+                          status["rate"]["setpoint"])
+        window.addstr(startY + 4, startX + 1, str(ramp))
+        window.chgat(startY + 4, startX + 1, 13, curses.A_BOLD)
+        window.chgat(startY + 4, startX + 30, 8, curses.A_BOLD)
+
+        window.addstr(startY + 6, startX + 18,
+                      "{0:>8s}".format(status["status"]), curses.A_BOLD)
 
     def refreshDisplay(self):
         self.screen.noutrefresh()
@@ -109,6 +117,10 @@ class WFDisplay(object):
         self.ppsDisplay.noutrefresh()
         self.npsDisplay.noutrefresh()
         curses.doupdate()
+
+    def handleKeypress(self, key):
+        if key in (ord("q"), ord("Q")):
+            self.end()
 
     def end(self):
         curses.nocbreak()
