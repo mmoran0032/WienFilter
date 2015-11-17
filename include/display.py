@@ -70,15 +70,12 @@ class WFDisplay(object):
 
     def addSupply(self, window, supply, status, startY=1, startX=1):
         window.box()
-        window.attron(curses.A_BOLD | curses.color_pair(1))
-        window.addstr(startY - 1, startX, " {} Power Supply ".format(supply))
-        window.addstr(startY + 6, startX + 1, "Status:")
-        window.attroff(curses.A_BOLD)
-
-        self.addReadbackWithBar(window, "Voltage (kV):", status["voltage"],
-                                startY + 1, startX + 1)
-        self.addReadbackWithBar(window, "Current (μA):", status["current"],
-                                startY + 2, startX + 1)
+        window.addstr(startY - 1, startX, " {} Power Supply ".format(supply),
+                      curses.A_BOLD | curses.color_pair(4))
+        self.addReadback(window, "Voltage (kV):", status["voltage"],
+                         startY + 1, startX + 1)
+        self.addReadback(window, "Current (μA):", status["current"],
+                         startY + 2, startX + 1)
 
         ramp = Readback("Ramp Rate:", 71, showBar=False, numberFormat="8d")
         ramp.updateValues(status["rate"]["value"],
@@ -87,10 +84,11 @@ class WFDisplay(object):
         window.chgat(startY + 4, startX + 1, 13, curses.A_BOLD)
         window.chgat(startY + 4, startX + 30, 8, curses.A_BOLD)
 
+        window.addstr(startY + 6, startX + 1, "Status:", curses.A_BOLD)
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]), curses.A_BOLD)
 
-    def addReadbackWithBar(self, window, name, status, y, x):
+    def addReadback(self, window, name, status, y, x):
         info = Readback(name, 71)
         info.updateValues(status["value"], status["setpoint"], status["limit"])
         window.addstr(y, x, str(info))
