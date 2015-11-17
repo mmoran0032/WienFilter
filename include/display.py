@@ -106,6 +106,8 @@ class WFDisplay(object):
         ramp.updateValues(status["rate"]["value"],
                           status["rate"]["setpoint"])
         window.addstr(startY + 4, startX + 1, str(ramp))
+        window.chgat(startY + 4, startX + 1, 13, curses.A_BOLD)
+        window.chgat(startY + 4, startX + 30, 8, curses.A_BOLD)
 
         window.addstr(startY + 6, startX + 18,
                       "{0:>8s}".format(status["status"]), curses.A_BOLD)

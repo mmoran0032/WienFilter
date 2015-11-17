@@ -28,7 +28,7 @@ class Readback(object):
         if self.showBar and self.limit is not None:
             self.percent = abs(self.value / self.limit * 100)
             bar = Bar(barsize, self.percent)
-            display = "{}{}".format(display, str(bar))
+            display = "{0}{1}".format(display, str(bar))
         return display
 
     def updateValues(self, value, setpoint, limit=None):
