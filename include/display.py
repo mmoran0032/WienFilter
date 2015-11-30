@@ -43,7 +43,7 @@ class WFDisplay(object):
 
     def createGlobalOptions(self):
         self.screen.chgat(curses.LINES - 1, 0, curses.color_pair(5))
-        self.screen.addstr(curses.LINES - 1, 2, "SET   DISCONNECT   EXIT",
+        self.screen.addstr(curses.LINES - 1, 2, "(Q)UIT",
                            curses.A_BOLD | curses.color_pair(5))
 
     def createStatusWindow(self):
