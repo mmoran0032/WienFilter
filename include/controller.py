@@ -6,23 +6,9 @@ from include.model import WFModel
 from share.config import negativeAddress, positiveAddress
 
 
-class WFController(object):
+class WFController:
 
     def __init__(self):
-        # self._status = {
-        #     "Positive": {
-        #         "status": 0,
-        #         "voltage": {"value": 0, "setpoint": 0, "limit": 0},
-        #         "current": {"value": 0, "setpoint": 0, "limit": 0},
-        #         "rate": 0
-        #     },
-        #     "Negative": {
-        #         "status": 0,
-        #         "voltage": {"value": 0, "setpoint": 0, "limit": 0},
-        #         "current": {"value": 0, "setpoint": 0, "limit": 0},
-        #         "rate": 0
-        #     }
-        # }
         self._status = dict()
         self.posModel = WFModel(positiveAddress)
         self.negModel = WFModel(negativeAddress)

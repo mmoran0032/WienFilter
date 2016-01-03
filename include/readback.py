@@ -4,7 +4,7 @@
 from include.bar import Bar
 
 
-class Readback(object):
+class Readback:
 
     def __init__(self, name, size, showBar=True, numberFormat="8.3f"):
         self.name = name

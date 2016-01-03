@@ -4,7 +4,7 @@
 import socket
 
 
-class WFModel(object):
+class WFModel:
 
     def __init__(self, address):
         self.address = address

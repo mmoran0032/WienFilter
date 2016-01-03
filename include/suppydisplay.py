@@ -1,7 +1,7 @@
 # supplydisplay - provides WFSupplyDisplay to show a single power supply
 
 
-class WFSupplyDisplay(object):
+class WFSupplyDisplay:
 
     def __init__(self, name, window, size):
         self.name = name

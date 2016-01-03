@@ -1,7 +1,7 @@
 # powerStatus - reformats status readback
 
 
-class PSStatus(object):
+class PSStatus:
 
     def __init__(self):
         self.status = None

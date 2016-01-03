@@ -4,7 +4,7 @@
 from include.display import WFDisplay
 
 
-class DummyController(object):
+class DummyController:
 
     def __init__(self):
         self.status = {

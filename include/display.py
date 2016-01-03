@@ -7,7 +7,7 @@ from time import sleep
 from include.readback import Readback
 
 
-class WFDisplay(object):
+class WFDisplay:
 
     def __init__(self, controller):
         self.isUpdating = True

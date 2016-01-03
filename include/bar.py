@@ -3,12 +3,13 @@
 
 from math import modf
 
+# alternate bar progressions
 # bars = [" ", " ", " ", "|", "|", "|", "|", "█", "█"]
 # bars = [" ", " ", " ", " ", "|", "|", "|", "|", "|"]
 bars = [" ", " ", " ", " ", "█", "█", "█", "█", "█"]
 
 
-class Bar(object):
+class Bar:
 
     def __init__(self, size, percent=0, preChar="[", postChar="]",
                  emptyChar=" ", withText=True):
